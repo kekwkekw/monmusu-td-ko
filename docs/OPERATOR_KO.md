@@ -154,6 +154,10 @@ python -X utf8 -m unittest discover -s tools -p test_novel_workflow.py -v
 | 중복 | JP→KO dict로 합치지 않고 행 배열 유지. 같은 JP의 서로 다른 번역·HOLD가 공존 가능 |
 | 재개 | 초벌·검수·반영을 행별로 관리하고 round를 추가해 부분 진행 |
 | HOLD 출력 | 표시문은 별도 메타데이터. KO가 없는 행에서도 원문 제어 정보 보존 |
-| 배포 | 이번 범위는 로컬 검수 결과까지. 향후 CDN/BepInEx adapter가 이 행별 결과와 위치를 사용 |
+| 배포 | apply는 로컬 검수 결과까지. 별도 MonmusuMod adapter가 이 행별 결과와 위치를 사용 |
 
-GCMod package manifest와 게임 설치는 몬타디에 가져오지 않았다. Git commit/push나 CDN 게시를 자동 실행하는 명령도 없다. 참조한 gctrans 구현과 필수 차이는 [UPSTREAM_KO.md](UPSTREAM_KO.md)에 기록했다. 로컬 reference 원본은 Git에 포함하지 않는다.
+Novel runtime은 몬타디의 행별 원문 대조를 지원하는 manifest를 사용한다. UI/master 배포 형식과 hash/size descriptor는 gctrans를 따른다. [UI 운영 안내](../translation/ui/README_KO.md)에 전체 입력, 부분 검수, manifest 생성을 정리했다. Git commit/push나 CDN 게시를 자동 실행하는 명령은 없다. 참조한 gctrans 구현과 필수 차이는 [UPSTREAM_KO.md](UPSTREAM_KO.md)에 기록했다. 로컬 reference 원본은 Git에 포함하지 않는다.
+
+검수 결과를 게임 적용 후보로 만들 때는 `python -X utf8 tools/update/cli.py mod-package` 또는 [플러그인 빌드 절차](../plugin/README_KO.md)를 사용한다. 이 단계는 `dist/`에 로컬 패키지를 작성하며 게임 설치·실행·CDN 게시를 수행하지 않는다. 실제 표시 확인은 별도로 기록한다.
+
+사용자 승인으로 진행한 설치는 `plugin/Install.ps1`을 사용하며, 2026-11-01 첫 시나리오의 [실기 결과](../plugin/RUNTIME_TEST_KO.md)를 확인했다. XUnity는 사용자 지시로 비활성 상태를 유지한다. 재실행은 지정된 `dmm-ex-launcher.ps1`에서 `mnms_td_r18`을 선택한다. 설치·실기 작업으로 번역본, 검수본, 동결 HOLD 정책을 변경하지 않는다.

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "tables": {
+    "1": {
+      "class": "ntd.database.cUnitCard",
+      "source_id": "3ac97ca0fd1e8390db9f17c71e79b5e5ad5ccb11a47f4daf129c9fbb925e3f06:000003_-9139659236650648288"
+    },
+    "picturebook_data": {
+      "class": "ntd.database.cPictureBookDataTable",
+      "source_id": "5c39af0a85d1c2cc059a66d97d5edc91903d4dd7ab09c0cfeaba64e1f63c6fb3:000158_9752175266642456"
+    },
+    "sub_story_tab_data": {
+      "class": "ntd.database.SubStoryTabDataTable",
+      "source_id": "5c39af0a85d1c2cc059a66d97d5edc91903d4dd7ab09c0cfeaba64e1f63c6fb3:000004_-8877237416100137946"
+    }
+  }
+}

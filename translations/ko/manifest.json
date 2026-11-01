@@ -1,0 +1,27 @@
+{
+  "master": {
+    "path": "master.json",
+    "sha256": "b96e66ed91cc047a7e1e0d740de897956121ba530260e723c6aa2ff2663e0ca4"
+  },
+  "master_bindings": {
+    "path": "master-bindings.json",
+    "sha256": "f83ea7e8e3ab2fbe9dcb391c033736a70988e2efc83d5873c93eafa4187b6bc4"
+  },
+  "names": {
+    "path": "names.json",
+    "sha256": "06f79f66771ea0b86b04af256e954147e390a424f127a1ac08d770ee05250192"
+  },
+  "policy_sha256": "702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099",
+  "scenarios": [
+    {
+      "path": "novels/10001A0_Nml--a8704194e78cea5a.json",
+      "scenario_name": "10001A0_Nml",
+      "sha256": "2027537d7da786ba709e50305eb7c7a02121bacb9f07770bb8f69cb63d618024"
+    }
+  ],
+  "schema": "monmusu-runtime-manifest-v1",
+  "ui": {
+    "path": "ui.json",
+    "sha256": "b995434d9db4ffa87b9d6c92152efb9cc69a9c2ab7ce34e8d94aae4532ca2467"
+  }
+}
