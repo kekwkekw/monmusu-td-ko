@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# This user-approved file is frozen by its exact bytes, including line endings.
+/HOLD_POLICY.md -text whitespace=-blank-at-eof

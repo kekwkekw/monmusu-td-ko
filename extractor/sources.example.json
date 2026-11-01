@@ -1,0 +1,10 @@
+{
+  "game_root": "C:/Games/mnms_td_r18",
+  "sources": [
+    {"label": "game", "root": "${game_root}/monster_musume_tdx_Data", "mode": "game_data", "generator": "game"},
+    {"label": "datatable", "root": "../references/DataTable", "mode": "json"},
+    {"label": "db_site", "root": "../references/monmusu-db-site/assets", "mode": "json"},
+    {"label": "current_remote", "root": "remote/acquisition-final.jsonl", "mode": "acquisition"},
+    {"label": "game_root_bundle", "root": "${game_root}", "mode": "root_bundles", "generator": "game"}
+  ]
+}

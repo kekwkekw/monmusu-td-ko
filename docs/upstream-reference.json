@@ -1,0 +1,23 @@
+{
+  "repository": "kekwkekw/gctrans",
+  "ref": "main",
+  "retrieved_date": "2026-11-01",
+  "files": [
+    {
+      "path": "tools/novel_workflow.py",
+      "blob_sha": "62d83e1bdd0dbee2c3d6eaf97b3ee9e6c9a628d8",
+      "url": "https://github.com/kekwkekw/gctrans/blob/main/tools/novel_workflow.py"
+    },
+    {
+      "path": "tools/translation_knowledge.py",
+      "blob_sha": "2222eb3fa82b8a25ff0058d8afbca7f954c8ef74",
+      "url": "https://github.com/kekwkekw/gctrans/blob/main/tools/translation_knowledge.py"
+    },
+    {
+      "path": "docs/OPERATOR_KO.md",
+      "blob_sha": "68ad9e4eda4fe35c87259080b9f3c3a784ec85f6",
+      "url": "https://github.com/kekwkekw/gctrans/blob/main/docs/OPERATOR_KO.md"
+    }
+  ],
+  "adaptation": "Workflow and current-only Knowledge referenced. Monmusu root HOLD_POLICY.md remains the only frozen project policy."
+}
