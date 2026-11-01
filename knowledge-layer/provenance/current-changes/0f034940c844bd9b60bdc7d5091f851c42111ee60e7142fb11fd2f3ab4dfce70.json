@@ -1,0 +1,35 @@
+{
+  "changes": [
+    {
+      "approved": true,
+      "jp": "エテジア",
+      "kind": "name",
+      "ko": "에테지아",
+      "old_ko": null
+    },
+    {
+      "approved": true,
+      "jp": "主人公",
+      "kind": "name",
+      "ko": "주인공",
+      "old_ko": null
+    }
+  ],
+  "entries": [
+    {
+      "after": "에테지아",
+      "before": null,
+      "key": "エテジア",
+      "kind": "name"
+    },
+    {
+      "after": "주인공",
+      "before": null,
+      "key": "主人公",
+      "kind": "name"
+    }
+  ],
+  "review_id": "pro-20261101-10001A0_Nml-r002",
+  "schema": "gc-current-knowledge-change-v1",
+  "translation_input": false
+}
