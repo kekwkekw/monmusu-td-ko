@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "kind": "master",
+      "path": "master.json",
+      "sha256": "b96e66ed91cc047a7e1e0d740de897956121ba530260e723c6aa2ff2663e0ca4",
+      "size": 733
+    },
+    {
+      "kind": "general_ui",
+      "path": "ui.json",
+      "sha256": "b995434d9db4ffa87b9d6c92152efb9cc69a9c2ab7ce34e8d94aae4532ca2467",
+      "size": 1399
+    },
+    {
+      "kind": "master_bindings",
+      "path": "master-bindings.json",
+      "sha256": "f83ea7e8e3ab2fbe9dcb391c033736a70988e2efc83d5873c93eafa4187b6bc4",
+      "size": 614
+    }
+  ],
+  "locale": "ko",
+  "origin": "local",
+  "revision": "mm-ui-2c8f7d4401e9c9fbbbeaf5f6",
+  "schema_version": 1
+}

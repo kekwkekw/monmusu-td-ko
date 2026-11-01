@@ -44,3 +44,7 @@
 .DS_Store
 desktop.ini
 .test-novel-*/
+.test-ui-*/
+/dist/
+**/bin/
+**/obj/

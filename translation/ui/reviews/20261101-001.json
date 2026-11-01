@@ -1,0 +1,432 @@
+{
+  "policy_sha256": "702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099",
+  "review_id": "codex-ui-smoke-20261101-001",
+  "reviewer": "Codex",
+  "rows": [
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "確認",
+      "ko": "확인",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "キャンセル",
+      "ko": "취소",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "決定",
+      "ko": "결정",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "閉じる",
+      "ko": "닫기",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "戻る",
+      "ko": "뒤로",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "はい",
+      "ko": "예",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "いいえ",
+      "ko": "아니요",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "設定",
+      "ko": "설정",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "サウンド設定",
+      "ko": "사운드 설정",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "音量",
+      "ko": "음량",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "フルスクリーン表示",
+      "ko": "전체 화면 표시",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "攻撃力",
+      "ko": "공격력",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "防御力",
+      "ko": "방어력",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "物理防御",
+      "ko": "물리 방어",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "魔法防御",
+      "ko": "마법 방어",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "攻撃速度",
+      "ko": "공격 속도",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "射程",
+      "ko": "사거리",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "移動速度",
+      "ko": "이동 속도",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "ブロック数",
+      "ko": "저지 수",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "出撃コスト",
+      "ko": "출격 비용",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "所持数",
+      "ko": "보유 수",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "所持",
+      "ko": "보유",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "プロフィール",
+      "ko": "프로필",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "ステータス",
+      "ko": "능력치",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "サブスキル",
+      "ko": "보조 스킬",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "出撃",
+      "ko": "출격",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "スキップ",
+      "ko": "건너뛰기",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "Skip",
+      "ko": "건너뛰기",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "Auto",
+      "ko": "자동",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "Log",
+      "ko": "대화 기록",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "Back",
+      "ko": "뒤로",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "プレイヤーID",
+      "ko": "플레이어 ID",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "プレイヤーRank",
+      "ko": "플레이어 랭크",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "テキスト表示",
+      "ko": "텍스트 표시",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "<indent=3%>▲昇順",
+      "ko": "<indent=3%>▲오름차순",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "<indent=-6%>▼降順",
+      "ko": "<indent=-6%>▼내림차순",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "<indent=5%>ソート",
+      "ko": "<indent=5%>정렬",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "<cspace=2>レアリティ",
+      "ko": "<cspace=2>희귀도",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "コスト",
+      "ko": "비용",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "装備",
+      "ko": "장비",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "クエスト",
+      "ko": "퀘스트",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "ミッション",
+      "ko": "미션",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "확보한 Text/코드 원문의 UI 의미와 한국어를 Codex가 대조했다. 태그·숫자·변수는 원형 유지. 실기 관측 여부는 별도 기록한다.",
+      "jp": "詳細",
+      "ko": "상세",
+      "lane": "ui"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "charaName",
+      "jp": "エテジア",
+      "ko": "에테지아",
+      "lane": "master",
+      "table": "1"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "nickname",
+      "jp": "ケンタウロス娘",
+      "ko": "켄타우로스 소녀",
+      "lane": "master",
+      "table": "1"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "text",
+      "jp": "【ケンタウロス娘】エテジア",
+      "ko": "【켄타우로스 소녀】에테지아",
+      "lane": "master",
+      "table": "1"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "table[].icon_text",
+      "jp": "ケンタウロス族の娘、エテジア",
+      "ko": "켄타우로스족 소녀, 에테지아",
+      "lane": "master",
+      "table": "picturebook_data"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "table[].type",
+      "jp": "ケンタウロス娘",
+      "ko": "켄타우로스 소녀",
+      "lane": "master",
+      "table": "picturebook_data"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "table[].tab_name",
+      "jp": "サブストーリー",
+      "ko": "서브 스토리",
+      "lane": "master",
+      "table": "sub_story_tab_data"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "table[].tab_name",
+      "jp": "サブストーリー2",
+      "ko": "서브 스토리2",
+      "lane": "master",
+      "table": "sub_story_tab_data"
+    },
+    {
+      "approved": true,
+      "disposition": "translate",
+      "evidence": "현재 master의 표시 필드와 대조했다. 에테지아는 승인 Names를 따랐고, 종족·탭 표기는 원문 의미를 확인했다. ID·검색용 kana·시나리오 이름은 변경하지 않는다.",
+      "field": "table[].tab_name",
+      "jp": "サブストーリー3",
+      "ko": "서브 스토리3",
+      "lane": "master",
+      "table": "sub_story_tab_data"
+    }
+  ],
+  "schema": "monmusu-ui-review-v1"
+}

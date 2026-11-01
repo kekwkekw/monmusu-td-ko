@@ -1,0 +1,24 @@
+{
+  "asset_version": "b5aff4d749",
+  "images": "Image pixels are not text entries; OCR/translation not performed.",
+  "master_fields": 10608,
+  "master_occurrences": 142458,
+  "master_pairs": 82503,
+  "master_table_variants": 4249,
+  "master_tables": 4158,
+  "policy": "Pending is not HOLD. Original snapshot including non-display strings remains preserved.",
+  "schema": "monmusu-ui-intake-v1",
+  "snapshot": "2026-10-28",
+  "source_categories": {
+    "kept/masterdata": 11880,
+    "kept/ui_candidates": 408539
+  },
+  "translated": 0,
+  "ui_candidates": {
+    "code_literal": 1571,
+    "literal": 40219,
+    "other_serialized_japanese_fields": 81297
+  },
+  "ui_occurrences": 41790,
+  "ui_unique_strings": 2799
+}
