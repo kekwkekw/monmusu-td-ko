@@ -4,6 +4,7 @@ param(
     [string]$Dotnet = '',
     [string]$Book = '',
     [string]$NugetPackages = '',
+    [string]$FontBundle = '',
     [switch]$Offline
 )
 $ErrorActionPreference = 'Stop'
@@ -51,6 +52,12 @@ try {
     Check-Exit 'Plugin build'
     foreach ($name in @('MonmusuMod.dll', 'MonmusuMod.Core.dll')) {
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot "MonmusuMod/bin/Release/net6.0/$name") -Destination (Join-Path $package $name) -Force
+    }
+    if ($FontBundle) {
+        New-Item -ItemType Directory -Path (Join-Path $package 'fonts') -Force | Out-Null
+        Copy-Item -LiteralPath (Resolve-Path -LiteralPath $FontBundle).Path -Destination (Join-Path $package 'fonts/RHR_Medium_GFSAFE_ADH.bundle') -Force
+        & $Python -X utf8 tools/font_bundle_metadata.py $FontBundle (Join-Path $package 'fonts/RHR_Medium_GFSAFE_ADH.bundle.metrics.json')
+        Check-Exit 'TMP compatibility metrics'
     }
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README_KO.md') -Destination (Join-Path $root 'dist/MonmusuMod/README_KO.md') -Force
     # A new binary must not carry a previous run's runtime attestation.

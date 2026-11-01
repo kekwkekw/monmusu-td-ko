@@ -63,6 +63,7 @@ public sealed class MasterUiTranslations
             throw new InvalidDataException("Invalid Master/UI pair or changed controls/numbers");
     }
     public string? TranslateUi(string exact) => ui.TryGetValue(exact, out var result) ? result : null;
+    public bool HasMasterAsset(string name) => master.ContainsKey(name);
     public bool HasMaster(string name, string className) => master.ContainsKey(name) && bindings.Tables[name].Class == className;
     public int ApplyMaster(string name, string className, IMasterNode root, Action<string>? missingField = null)
     {

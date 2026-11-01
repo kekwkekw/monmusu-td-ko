@@ -1,4 +1,5 @@
 using System.Text;
+using Il2CppInterop.Runtime;
 using MonmusuMod.Core;
 using TMPro;
 using UnityEngine;
@@ -11,9 +12,11 @@ internal static class UiHooks
 {
     [ThreadStatic] static bool applying;
     static readonly HashSet<string> logged = new(StringComparer.Ordinal);
-    static bool Protected(Component text) => text == null || text.GetComponentInParent<InputField>(true) != null ||
-        text.GetComponentInParent<TMP_InputField>(true) != null || text.GetComponentInParent<AdvUguiMessageWindow>(true) != null ||
-        text.GetComponentInParent<AdvUguiBacklog>(true) != null || text.GetComponentInParent<AdvUguiSelection>(true) != null ||
+    // The generated generic overload has invalid Cast<T> constraints in this
+    // game's interop. Use the retained native Type/Boolean overload instead.
+    static bool Protected(Component text) => text == null || text.GetComponentInParent(Il2CppType.Of<InputField>(), true) != null ||
+        text.GetComponentInParent(Il2CppType.Of<TMP_InputField>(), true) != null || text.GetComponentInParent(Il2CppType.Of<AdvUguiMessageWindow>(), true) != null ||
+        text.GetComponentInParent(Il2CppType.Of<AdvUguiBacklog>(), true) != null || text.GetComponentInParent(Il2CppType.Of<AdvUguiSelection>(), true) != null ||
         text.TryCast<UguiNovelText>() != null;
     static string? Translate(string value, string renderer)
     {

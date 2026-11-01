@@ -18,11 +18,8 @@ try {
         @{ Type='Utage.AdvUguiMessageWindow'; Method='OnTextChanged'; Parameters=@('Utage.AdvMessageWindow') },
         @{ Type='Utage.AdvUguiBacklog'; Method='Init'; Parameters=@('Utage.AdvBacklog') },
         @{ Type='Utage.AdvUguiSelection'; Method='Init'; Parameters=@('Utage.AdvSelection','Il2CppSystem.Action`1<Utage.AdvUguiSelection>') },
-        @{ Module='UnityEngine.AssetBundleModule.dll'; Type='UnityEngine.AssetBundleRequest'; Method='get_asset'; Parameters=@() },
-        @{ Module='UnityEngine.AssetBundleModule.dll'; Type='UnityEngine.AssetBundleRequest'; Method='get_allAssets'; Parameters=@() },
-        @{ Module='UnityEngine.AssetBundleModule.dll'; Type='UnityEngine.AssetBundle'; Method='LoadAsset_Internal'; Parameters=@('System.String','Il2CppSystem.Type') },
-        @{ Module='UnityEngine.AssetBundleModule.dll'; Type='UnityEngine.AssetBundle'; Method='LoadAssetWithSubAssets_Internal'; Parameters=@('System.String','Il2CppSystem.Type') },
-        @{ Module='UnityEngine.CoreModule.dll'; Type='UnityEngine.Resources'; Method='Load'; Parameters=@('System.String','Il2CppSystem.Type') },
+        @{ Type='ntd.database.DataBaseManager/_Preload_d__184'; Method='MoveNext'; Parameters=@() },
+        @{ Type='ntd.database.DataBaseManager/_PreloadBeforeTitle_d__183'; Method='MoveNext'; Parameters=@() },
         @{ Module='UnityEngine.UI.dll'; Type='UnityEngine.UI.Text'; Method='set_text'; Parameters=@('System.String') },
         @{ Module='UnityEngine.UI.dll'; Type='UnityEngine.UI.Text'; Method='OnEnable'; Parameters=@() },
         @{ Module='UnityEngine.UI.dll'; Type='UnityEngine.UI.Text'; Method='OnPopulateMesh'; Parameters=@('UnityEngine.UI.VertexHelper') },
@@ -32,7 +29,7 @@ try {
     )
     $hooks = foreach ($spec in $expected) {
         $source = if ($spec.Module) { $modules[$spec.Module] } else { $assembly }
-        $type = $source.Types | Where-Object FullName -EQ $spec.Type
+        $type = $source.GetType($spec.Type)
         $methods = @($type.Methods | Where-Object { $_.Name -eq $spec.Method -and
             ($_.Parameters.ParameterType.FullName -join '|') -eq ($spec.Parameters -join '|') })
         if ($methods.Count -ne 1) { throw "Missing/ambiguous hook: $($spec.Type).$($spec.Method)" }

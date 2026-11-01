@@ -32,7 +32,8 @@ public sealed class Plugin : BasePlugin
         string cache = Path.Combine(Paths.CachePath, "MonmusuMod");
         string cdn = Config.Bind("Translation", "CdnBaseUrl", "https://raw.githubusercontent.com/kekwkekw/monmusu-td-ko/main/translations/ko/", "Public HTTPS directory containing manifest.json; empty uses bundled/local data.").Value;
         string fontName = Config.Bind("Font", "Family", "Malgun Gothic", "Installed Unity dynamic font family used for Korean scenario text.").Value;
-        bool useFont = Config.Bind("Font", "Enabled", true, "Assign the Korean font only to Utage story labels containing Hangul.").Value;
+        string fontBundle = Config.Bind("Font", "TmpBundle", "fonts/RHR_Medium_GFSAFE_ADH.bundle", "Separately supplied TMP font bundle, relative to this plugin folder.").Value;
+        bool useFont = Config.Bind("Font", "Enabled", true, "Apply Korean fonts to translated Text/TMP labels containing Hangul.").Value;
         LogUnmatched = Config.Bind("Diagnostics", "LogUnmatchedGrids", false, "Log encountered grid names without translations for runtime diagnosis.").Value;
         try
         {
@@ -49,7 +50,7 @@ public sealed class Plugin : BasePlugin
                 }
                 catch (Exception ex) { Log.LogWarning("MM_CDN_FAILED; keeping validated local package: " + ex.Message); }
             }
-            Fonts = new KoreanFont(fontName, useFont, msg => Log.LogInfo(msg), msg => Log.LogWarning(msg));
+            Fonts = new KoreanFont(fontName, Path.IsPathRooted(fontBundle) ? fontBundle : Path.Combine(pluginRoot, fontBundle), useFont, msg => Log.LogInfo(msg), msg => Log.LogWarning(msg));
             harmony = new Harmony(Guid);
             // Explicit signatures checked against the installed game's interop assemblies.
             Patch(typeof(AdvImportBook), "BootInit", null, nameof(Hooks.BookReady));
@@ -57,18 +58,15 @@ public sealed class Plugin : BasePlugin
             Patch(typeof(AdvUguiMessageWindow), "OnTextChanged", null, nameof(Hooks.MessageChanged), typeof(AdvMessageWindow));
             Patch(typeof(AdvUguiBacklog), "Init", null, nameof(Hooks.BacklogReady), typeof(AdvBacklog));
             Patch(typeof(AdvUguiSelection), "Init", null, nameof(Hooks.SelectionReady), typeof(AdvSelection), typeof(Il2CppSystem.Action<AdvUguiSelection>));
-            PatchTo(typeof(AssetBundleRequest), "get_asset", typeof(MasterHooks), null, nameof(MasterHooks.AssetReady));
-            PatchTo(typeof(AssetBundleRequest), "get_allAssets", typeof(MasterHooks), null, nameof(MasterHooks.AssetsReady));
-            PatchTo(typeof(AssetBundle), "LoadAsset_Internal", typeof(MasterHooks), null, nameof(MasterHooks.AssetReady), typeof(string), typeof(Il2CppSystem.Type));
-            PatchTo(typeof(AssetBundle), "LoadAssetWithSubAssets_Internal", typeof(MasterHooks), null, nameof(MasterHooks.AssetsReady), typeof(string), typeof(Il2CppSystem.Type));
-            PatchTo(typeof(Resources), "Load", typeof(MasterHooks), null, nameof(MasterHooks.AssetReady), typeof(string), typeof(Il2CppSystem.Type));
+            PatchTo(typeof(ntd.database.DataBaseManager._Preload_d__184), "MoveNext", typeof(MasterHooks), null, nameof(MasterHooks.PreloadReady));
+            PatchTo(typeof(ntd.database.DataBaseManager._PreloadBeforeTitle_d__183), "MoveNext", typeof(MasterHooks), null, nameof(MasterHooks.BeforeTitleReady));
             PatchTo(typeof(Text), "set_text", typeof(UiHooks), nameof(UiHooks.LegacySet), nameof(UiHooks.LegacyReady), typeof(string));
             PatchTo(typeof(Text), "OnEnable", typeof(UiHooks), null, nameof(UiHooks.LegacyReady));
             PatchTo(typeof(Text), "OnPopulateMesh", typeof(UiHooks), nameof(UiHooks.LegacyReady), null, typeof(VertexHelper));
             PatchTo(typeof(TMP_Text), "set_text", typeof(UiHooks), nameof(UiHooks.TmpSet), nameof(UiHooks.TmpReady), typeof(string));
             PatchTo(typeof(TextMeshProUGUI), "OnEnable", typeof(UiHooks), null, nameof(UiHooks.TmpReady));
             PatchTo(typeof(TextMeshProUGUI), "OnPreRenderCanvas", typeof(UiHooks), nameof(UiHooks.TmpReady), null);
-            Log.LogInfo($"MM_READY version=0.2.0 package={package.Identity} scenarios={package.Manifest.Scenarios.Count} rows={package.RowCount} names={package.NameCount} ui={package.MasterUi.UiCount} master={package.MasterUi.MasterCount} hooks=16");
+            Log.LogInfo($"MM_READY version=0.2.0 package={package.Identity} scenarios={package.Manifest.Scenarios.Count} rows={package.RowCount} names={package.NameCount} ui={package.MasterUi.UiCount} master={package.MasterUi.MasterCount} hooks=13");
             Log.LogInfo("MM_DIAGNOSTICS: MM_GRID records source matching; MM_FONT_READY records Korean font initialization. Visual/voice checks are recorded separately.");
             if (Directory.EnumerateFiles(Paths.PluginPath, "XUnity.AutoTranslator*.dll", SearchOption.AllDirectories).Any())
                 Log.LogWarning("MM_OTHER_TRANSLATOR: XUnity AutoTranslator is installed. Its text/font hooks can affect the later visual test; its configuration was not modified.");
