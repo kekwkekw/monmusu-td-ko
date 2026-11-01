@@ -1,6 +1,6 @@
 # 몬타디 한국어 번역 플러그인
 
-BepInEx 6 / IL2CPP용 `MonmusuMod` 0.2.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject master와 Unity Text/TMP UI도 치환한다. 현재 패키지는 `10001A0_Nml`의 PRO 검수 26행·이름 2건과 Codex가 검수한 실기용 UI 43건·master 8건이다. 0.1.0의 시나리오 실기 기록은 [별도 문서](RUNTIME_TEST_KO.md)에 보존한다. 전체 UI/master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
+BepInEx 6 / IL2CPP용 `MonmusuMod` 0.2.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject master와 Unity Text/TMP UI도 치환한다. 현재 패키지는 `10001A0_Nml`의 PRO 검수 26행·이름 2건과 Codex가 검수한 실기용 UI 43건·master 8건이다. [0.2.0 UI/master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)에 검증 범위를 구분했다. 전체 UI/master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
 
 ## 빌드
 
