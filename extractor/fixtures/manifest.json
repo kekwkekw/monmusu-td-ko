@@ -1,0 +1,14 @@
+{
+  "master": {
+    "fixture": "master.bytes",
+    "bundle_filename": "240e4f67425f9437790f54d801897157a4a197b8ff3816f0ddf353ead4768c80.bytes",
+    "bytes": 3984357,
+    "sha256": "81769e5e7a9171387200956b579ae638b776113b2b6070187596d85646120700"
+  },
+  "story": {
+    "fixture": "story.bytes",
+    "bundle_filename": "c1bbbbe3daebc128c94eb5cc21c3e4917bb48f5aae54b433496ddc6042c8f066.bytes",
+    "bytes": 7792,
+    "sha256": "71f7676cdaca6324d7ddc0741cc02d7b93d559ef573a3ac340e3bbf92c4c5918"
+  }
+}
