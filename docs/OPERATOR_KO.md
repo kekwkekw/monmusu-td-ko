@@ -1,6 +1,6 @@
 # 몬타디 Novel 번역·검수 운영
 
-명령은 저장소 루트에서 Python 3.14 이상으로 실행한다. 초기 환경 구성은 루트 README를 따른다. 기존 workspace는 `D:\monmusu_workspace`를 계속 사용한다. gctrans의 현행 `prepare → Codex 초벌 → PRO 의미검수 → check → apply` 흐름을 따른다. 도구는 모델이나 API를 호출하지 않는다. 초벌과 의미검수는 작업자가 파일에 기록하며, 코드가 의미검수를 수행했다고 표시하지 않는다.
+명령은 저장소 루트에서 Python 3.14 이상으로 실행한다. 초기 환경 구성은 루트 README를 따른다. 기존 workspace는 `D:\monmusu_workspace`를 계속 사용한다. gctrans의 현행 `prepare → 초벌 → PRO 의미검수 → check → apply` 흐름을 따른다. 초벌은 기존 Codex 파일 작성 또는 선택적인 [API 초벌 도구](NOVEL_API_KO.md)를 사용한다. `novel` 명령은 API를 호출하지 않으며 `novel-api run`만 확인된 계획에 따라 호출한다. 의미검수는 실제 PRO 검수자가 기록하며 코드가 대신 수행했다고 표시하지 않는다.
 
 ## 정본
 
@@ -14,6 +14,7 @@
 | `work/novels/<batch>/draft.json` | 진행 중인 초벌과 지식 제안 |
 | `work/novels/<batch>/reviews/<round>/review.json` | 별도 PRO 검수본. round별 초벌 스냅샷과 binding도 보존 |
 | `work/novels/<batch>/progress.json` | 행별 초벌 상태, 검수 상태, 적용 상태와 기술적 오류 |
+| `work/novels/<api-run>/` | 선택적인 API 실행 계획, 요청·응답, 비용 예약, 검증 결과. API 키는 저장하지 않음 |
 | `translation/state/` | 입력 catalog, 적용된 행 상태, 적용 영수증, 복구 journal |
 | `translations/ko/novels/` | 승인된 행만 들어 있는 로컬 결과. 중복 JP도 별도 행으로 보존 |
 | `knowledge-layer/provenance/current-changes/` | 승인된 지식의 변경 전후 근거. 정상 번역 입력에는 포함하지 않음 |
@@ -64,7 +65,11 @@ python -X utf8 tools/update/cli.py novel checkpoint --batch work/novels/20261101
 
 태그·변수·보호 토큰·실제 개행·literal `\n`/`\r`은 철자와 순서를 유지한다. KO 안에서 문자 위치는 번역 길이에 따라 바뀔 수 있지만 원문 태그의 위치 기록은 변경하지 않는다. PageCtrl·Voice·source_cells는 원본 그대로 둔다. 구조 오류는 기술 오류로 보고하며 콘텐츠 HOLD로 바꾸지 않는다.
 
+API를 사용할 때도 `prepare`의 대상과 current context를 재사용한다. `novel-api plan --batch ...`는 빈 pending 행 중 기존 검수 round에 포함되지 않은 행만 선택한다. 저장된 계획의 모델·effort·원문·예산을 확인한 후 `run --approve-plan <SHA>`를 실행한다. 결과는 즉시 기존 초벌에 쓰지 않으며 `import`로 검증된 행과 미승인 지식 제안만 가져온다. 시험 비교는 별도 새 배치에 import한다. 모델이 `approved`를 부여하거나 current Knowledge를 직접 변경할 수 없다. 상세 명령과 비용·중단 동작은 [API 운영 안내](NOVEL_API_KO.md)를 따른다.
+
 ## PRO 검수와 부분 반영
+
+API 신규 초벌의 잠정 기본 effort는 `xhigh`이며 `high`도 명시적 선택으로 유지한다. 2026-11-04 PRO 비교의 국소적인 품질 차이를 반영한 운영 기본값이다. 기존 동결 계획이나 이미 생성한 초벌을 다시 작성하지 않는다.
 
 ```powershell
 python -X utf8 tools/update/cli.py novel review --batch work/novels/20261101-001 --round 001
@@ -72,11 +77,15 @@ python -X utf8 tools/update/cli.py novel review --batch work/novels/20261101-001
 
 `drafted`이며 구조 검사를 통과한 행만 `reviews/001/review.json`으로 만든다. 미완료 행이나 구조 오류 행은 다음 작업으로 남기고 정상 행을 진행한다. HOLD도 하나의 완료된 초벌 판정으로 검수에 전달한다. 기존 round 파일은 재실행으로 덮어쓰지 않는다.
 
+PRO에 전달할 때는 `novel-api handoff --batch <배치> --round 001 --out <work/novels/아래 새 zip>`으로 원문 전체·정책·context·초벌·검수 binding·검수본·API provenance를 묶을 수 있다. 이 명령은 네트워크를 사용하지 않으며 기존 Codex 초벌 배치에도 적용된다. 실제 검수 후 반환한 `review.json`을 해당 round에 반영하고 아래 `check → apply`를 수행한다.
+
 PRO는 배치의 정책·source 전체·context와 round의 초벌 스냅샷을 읽고 다음을 검수한다.
 
 - 원문의 의미, 누락·추가, 말투·호칭, 사건·관계의 연속성
+- 행 경계를 넘는 단어·발화 연결, 태그의 한국어 내 정지 위치, 끊긴 발화와 인용·되받는 표현. 태그 철자·순서 보존만으로 연출 보존을 확정하지 않는다.
 - 행별 HOLD 판정과 사유
 - Names·Knowledge의 실제 내용, 범위, 중복·충돌과 근거
+- 인물의 발언과 사실을 구분하고, 뒤에서 철회되거나 거짓말로 밝혀진 주장을 실제 능력·설정으로 등록하지 않는다. 장면 관찰은 승인된 changes 없이 current에 올리지 않는다.
 
 검수 완료 행의 `review_status`를 `approved`, 수정 요청은 `changes_requested`, 미검수는 `pending`으로 둔다. 검수자가 `ko`, `hold`, `reason`, `review_note`를 확정한다. 실제 검수 후 문서의 고유 `review_id`, `pro_review_complete:true`, `knowledge_review`를 작성한다. 신규 지식이 없으면 그 결론을 적고 `changes:[]`를 유지한다. 완료 flag는 실제 의미검수나 검수자의 신원을 자동 증명하지 않는다.
 
