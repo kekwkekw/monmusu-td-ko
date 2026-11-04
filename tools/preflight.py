@@ -10,7 +10,8 @@ from translation_knowledge import load_current
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITES = [('extractor', 'test_core.py'), ('extractor', 'test_configuration.py'),
-          ('extractor', 'test_novel_intake.py'), ('tools', 'test_novel_workflow.py')]
+          ('extractor', 'test_novel_intake.py'), ('tools', 'test_novel_workflow.py'),
+          ('tools', 'test_novel_api.py')]
 
 
 def main():

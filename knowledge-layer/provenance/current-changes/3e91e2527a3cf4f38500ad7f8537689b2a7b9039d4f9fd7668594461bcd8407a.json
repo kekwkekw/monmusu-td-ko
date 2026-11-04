@@ -1,0 +1,42 @@
+{
+  "changes": [
+    {
+      "approved": true,
+      "jp": "ランケ",
+      "kind": "name",
+      "ko": "란케",
+      "old_ko": null
+    },
+    {
+      "approved": true,
+      "jp": "女魔術師Ａ",
+      "kind": "name",
+      "ko": "여마술사 A",
+      "old_ko": null
+    },
+    {
+      "approved": false,
+      "jp": "？？？",
+      "kind": "name",
+      "ko": "???",
+      "old_ko": null
+    }
+  ],
+  "entries": [
+    {
+      "after": "란케",
+      "before": null,
+      "key": "ランケ",
+      "kind": "name"
+    },
+    {
+      "after": "여마술사 A",
+      "before": null,
+      "key": "女魔術師Ａ",
+      "kind": "name"
+    }
+  ],
+  "review_id": "pro-20261104-ab86-10109C0_Nml-r1-8736667f",
+  "schema": "gc-current-knowledge-change-v1",
+  "translation_input": false
+}

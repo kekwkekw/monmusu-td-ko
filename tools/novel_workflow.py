@@ -314,9 +314,9 @@ def prepare_review(root, batch, round_name):
             continue
         old = current.get(rid)
         # Completed rows of this draft are skipped, while explicit corrections remain selectable.
-        if old and old.get('draft_row_sha256') == digest(encode(row)):
-            continue
         base = digest(encode(old)) if old else None
+        if old and old.get('draft_row_sha256') == digest(encode(row)) and base != document['target_preimages'][rid]:
+            continue
         if base != document['target_preimages'][rid]:
             errors.append({'row_id': rid, 'error': 'Row already updated; prepare a new correction batch'})
             continue

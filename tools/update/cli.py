@@ -11,18 +11,22 @@ sys.path.insert(0, str(ROOT / 'tools'))
 def main(arguments=None):
     args = list(sys.argv[1:] if arguments is None else arguments)
     if not args or args[0] in {'-h', '--help'}:
-        print('Usage: python tools/update/cli.py {novel|intake|ui-intake|ui|manifests|crawl|inventory|extract|classify|verify-extraction|preflight|mod-package} ...')
+        print('Usage: python tools/update/cli.py {novel|novel-api|intake|ui-intake|ui|manifests|crawl|inventory|extract|classify|verify-extraction|preflight|mod-package} ...')
         print('Novel: init, prepare, checkpoint, review, check, apply, status, verify, recover')
+        print('Novel API: plan, status, run (explicit plan approval), import, handoff')
         print('UI: check, apply, verify, status; manifests --check verifies public descriptors')
         print('Use novel <action> --help for authoring options; --repo selects the workspace.')
         return 0
     command, *rest = args
-    if command == 'novel':
-        import novel_workflow
+    if command in {'novel', 'novel-api'}:
+        if command == 'novel':
+            import novel_workflow as workflow
+        else:
+            import novel_api as workflow
         parser = argparse.ArgumentParser(add_help=False)
         parser.add_argument('--repo', type=Path, default=ROOT)
         known, forwarded = parser.parse_known_args(rest)
-        return novel_workflow.main(['--root', str(known.repo.resolve()), *forwarded])
+        return workflow.main(['--root', str(known.repo.resolve()), *forwarded])
     scripts = {'intake': ('extractor/novel_intake.py', []), 'crawl': ('extractor/crawl.py', []),
                'inventory': ('extractor/run.py', ['inventory']), 'extract': ('extractor/run.py', ['extract']),
                'classify': ('extractor/classify_output.py', []), 'verify-extraction': ('extractor/verify.py', []),

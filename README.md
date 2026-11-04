@@ -1,6 +1,6 @@
 # 몬스터娘TD 한국어화 파이프라인
 
-몬타디 IL2CPP 게임의 원본 수집·추출과 Novel 번역·검수 도구다. [gctrans](https://github.com/kekwkekw/gctrans)의 Novel 흐름을 따라 **시나리오 수집 → Codex 초벌 → ChatGPT PRO 의미검수 → 로컬 반영·검증 → 승인된 Git 반영**으로 진행한다. [BepInEx 플러그인](plugin/README_KO.md)은 승인된 행 기반 결과를 게임의 Utage 시나리오에 연결한다. `10001A0_Nml` 26행의 실제 게임 표시와 백로그를 확인했으며, 검증 범위는 [실기 기록](plugin/RUNTIME_TEST_KO.md)에 남겼다. CDN 게시와 전체 시나리오 검증은 별도다.
+몬타디 IL2CPP 게임의 원본 수집·추출과 Novel 번역·검수 도구다. [gctrans](https://github.com/kekwkekw/gctrans)의 Novel 흐름을 따라 **시나리오 수집 → Codex 또는 API 초벌 → ChatGPT PRO 의미검수 → 로컬 반영·검증 → 승인된 Git 반영**으로 진행한다. [BepInEx 플러그인](plugin/README_KO.md)은 승인된 행 기반 결과를 게임의 Utage 시나리오에 연결한다. `10001A0_Nml` 26행의 실제 게임 표시와 백로그를 확인했으며, 검증 범위는 [실기 기록](plugin/RUNTIME_TEST_KO.md)에 남겼다. CDN 게시와 전체 시나리오 검증은 별도다.
 
 운영 정본은 **[docs/OPERATOR_KO.md](docs/OPERATOR_KO.md)**다. 원문·제어 태그·화자 원값·행 위치·중복 행을 보존하고, HOLD는 해당 행만 보류한다. 초벌·검수·반영 상태를 나누어 중단 후 이어갈 수 있다.
 
@@ -43,6 +43,8 @@ python -X utf8 tools/update/cli.py novel verify
 ```
 
 기계 검사는 의미검수를 대신하지 않는다. `apply`는 승인된 행과 Names/Knowledge 변경만 로컬에 반영한다. Git 쓰기, 번역 API 호출, CDN 게시, 게임 설치를 자동으로 수행하지 않는다.
+
+선택적인 [API 초벌](docs/NOVEL_API_KO.md)은 `novel-api plan → run → import`로 같은 초벌 형식에 연결한다. `run`만 네트워크를 사용하며 모델·행·비용·호출 상한이 고정된 계획 SHA의 명시적 확인이 필요하다. 기본 실행과 오프라인 검사는 API를 호출하지 않는다.
 
 ## 저장소 구조
 

@@ -1,0 +1,22 @@
+{
+  "changes": [
+    {
+      "approved": true,
+      "jp": "ナナエ",
+      "kind": "name",
+      "ko": "나나에",
+      "old_ko": null
+    }
+  ],
+  "entries": [
+    {
+      "after": "나나에",
+      "before": null,
+      "key": "ナナエ",
+      "kind": "name"
+    }
+  ],
+  "review_id": "pro-20261104-ab86-10289B0_Nml-r1-8736667f",
+  "schema": "gc-current-knowledge-change-v1",
+  "translation_input": false
+}

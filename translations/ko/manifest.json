@@ -9,14 +9,24 @@
   },
   "names": {
     "path": "names.json",
-    "sha256": "06f79f66771ea0b86b04af256e954147e390a424f127a1ac08d770ee05250192"
+    "sha256": "93b843bde92dc6732e0f7487f5973c3f31acba15071a0158e1d9e1d29a0b0c96"
   },
   "policy_sha256": "702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099",
   "scenarios": [
     {
       "path": "novels/10001A0_Nml--a8704194e78cea5a.json",
       "scenario_name": "10001A0_Nml",
-      "sha256": "2027537d7da786ba709e50305eb7c7a02121bacb9f07770bb8f69cb63d618024"
+      "sha256": "1da064133a8a5cf1fdc58feb6b9bc353f2973f252a841a14db3644975b82d654"
+    },
+    {
+      "path": "novels/10109C0_Nml--956e277d336c8dca.json",
+      "scenario_name": "10109C0_Nml",
+      "sha256": "fb01ca22d72e37cf379a580a13c1484bb19e1b8f928e210497c1546831e40a36"
+    },
+    {
+      "path": "novels/10289B0_Nml--191f899fa87cae51.json",
+      "scenario_name": "10289B0_Nml",
+      "sha256": "8b68b3d793c9027688cae17e70b1f9810a4717a59c6994c98ac7ac7dcbfe411b"
     }
   ],
   "schema": "monmusu-runtime-manifest-v1",
