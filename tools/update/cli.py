@@ -14,7 +14,7 @@ def main(arguments=None):
         print('Usage: python tools/update/cli.py {novel|novel-api|intake|ui-intake|ui|manifests|crawl|inventory|extract|classify|verify-extraction|preflight|mod-package} ...')
         print('Novel: init, prepare, checkpoint, review, check, apply, status, verify, recover')
         print('Novel API: plan, status, run (explicit plan approval), import, handoff')
-        print('UI: check, apply, verify, status; manifests --check verifies public descriptors')
+        print('UI: export, check, apply, verify, status; manifests --check verifies public descriptors')
         print('Use novel <action> --help for authoring options; --repo selects the workspace.')
         return 0
     command, *rest = args

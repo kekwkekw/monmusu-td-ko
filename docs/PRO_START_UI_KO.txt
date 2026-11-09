@@ -1,0 +1,19 @@
+몬타디 일반 UI 텍스트 — Pro 번역 및 자체 재검수
+
+첨부 INPUT_UI*.zip을 풀고 INPUT_MANIFEST.json, 이 문서, HOLD_POLICY.md, FONT_SELECTION_KO.md를 읽는다. INPUT_MANIFEST가 배치와 파일명을 지정한다. HOLD 판정은 동봉한 동결 정책을 따른다. 일반 UI 텍스트만 작업한다.
+
+1. UI_SOURCE.json의 id와 JP를 기준으로 UI_LOCATIONS.jsonl의 resource_id를 연결한다. asset_name, class, pointer, containers와 동일 문자열의 다른 용도를 확인한다. literal부터 시작하고 code_literal을 이어서 본다. code_literal이라는 이유만으로 표시 또는 비표시라고 단정하지 않는다. 기존 승인 UI, Names, 적용 범위가 맞는 Knowledge를 reference/에서 확인한다. 동일한 JP는 전역 exact 매핑 하나를 공유하므로 등장 위치마다 다른 뜻이 필요하면 임의로 통일하지 말고 확인이 필요한 위치를 보고한다.
+
+2. Stage A에서 실제 초벌을 작성하고 stageA/draft.json에 원문, id, 초벌, 임시 판정과 근거를 보존한다. 미처리 항목은 pending으로 남긴다. 완료된 Stage A를 고정한 뒤 Stage B에서 모든 대상의 원문, 위치와 초벌을 대조한다. 표시 용도와 문맥, 의미, 용어, 태그·변수·개행·숫자, 버튼·좁은 목록의 문구 길이를 확인한다. 기존 용어는 가능한 한 일관되게 쓴다. 문구만 번역하고 글꼴 태그는 추가하지 않는다. 시나리오 본문은 RHR Medium, 일반 UI는 RHR Bold, 장식 텍스트는 메이플스토리 Bold가 기준이다.
+
+3. 최종 검수는 review.template.json을 복사한 review.json에 기록한다. schema, policy_sha256, review_id, reviewer, 각 행의 lane/ui와 jp를 그대로 유지한다. 위치와 의미를 확인한 행에 approved:true와 구체적인 evidence를 쓴다.
+   - translate: 표시 텍스트로 확인된 경우에만 한국어 ko를 쓴다. 정확한 JP, 태그·플레이스홀더·제어문자의 철자/순서 및 개행, 숫자와 수치 단위를 보존한다.
+   - keep_source: 내부 조회 키, 번역하지 않는 고유 표기 등 원문 유지 판단이 확정된 행이다. ko를 비운다.
+   - hold: HOLD_POLICY의 사유를 적용하는 행이다. ko를 비우고 행별 reason을 쓴다.
+   - pending: 작업이 끝나지 않았거나 표시 여부나 문맥을 확정하지 못한 행이다. ko를 비우고 approved:false를 유지한다. 미확정 사유는 보고에 남긴다.
+
+4. RETURN_UI001.zip처럼 INPUT_MANIFEST.json의 return_zip 이름으로 돌려준다. ZIP 루트에 review.json, stageA/draft.json, REPORT_KO.txt를 둔다. 보고서에 배치, translate/keep_source/hold/pending 수, 확인이 필요한 위치, 길이 점검 대상, 실제 로컬 check/apply 실행 여부를 적는다. 같은 Pro가 초벌과 재검수를 했다고 정확히 기록한다. 중단되면 초벌·검수 파일과 다음 id를 담은 PARTIAL_<배치>.zip을 제공한다.
+
+사용자는 반환 ZIP을 푼 뒤 D:\monmusu_workspace에서 review.json의 실제 경로로 아래 두 명령을 실행한다. check가 CHECKED이면 apply를 실행한다.
+python -X utf8 tools/update/cli.py ui check --review '<압축을 푼 폴더>\review.json'
+python -X utf8 tools/update/cli.py ui apply --review '<압축을 푼 폴더>\review.json'

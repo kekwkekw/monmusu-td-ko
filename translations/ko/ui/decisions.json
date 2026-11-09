@@ -1,5 +1,12 @@
 {
-  "policy_sha256": "702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099",
+  "policy_migration": {
+    "carried_forward_rows": 51,
+    "from_policy_sha256": "702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099",
+    "reason": "2026-11-09 사용자 승인 정책 개정은 몬스터 걸 퀘스트 콜라보의 루카 판정에 한정된다. 기존 UI/Master 51건의 검수 내용과 기록을 승계한다.",
+    "source_review_id": "codex-ui-smoke-20261101-001",
+    "source_review_sha256": "e020b1bcfb056851ebd9eb5e6e5564356563043f9f31068cf317f97af23d17a3"
+  },
+  "policy_sha256": "b5e7fd3e9caca00c1d40cf24880559ba1b79d6fec6b53af3006698eb26c34f6b",
   "rows": [
     {
       "approved": true,

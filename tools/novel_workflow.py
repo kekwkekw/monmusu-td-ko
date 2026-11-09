@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'extractor'))
 import novel_intake as intake
 
-POLICY_SHA256 = '702421dfdffe964ddfd69119c0a37d5c595dbc1c3afd4f3f5f179350782f3099'
+POLICY_SHA256 = 'b5e7fd3e9caca00c1d40cf24880559ba1b79d6fec6b53af3006698eb26c34f6b'
 SCHEMA = 'monmusu-novel-batch-v1'
 DRAFT_FIELDS = {'ko', 'hold', 'reason', 'translation_status', 'notes'}
 REVIEW_FIELDS = DRAFT_FIELDS | {'review_status', 'review_note'}
