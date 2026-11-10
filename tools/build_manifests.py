@@ -16,7 +16,7 @@ def payloads(root):
     ui_workflow.verify(root)
     files = {name: (folder / name).read_bytes() for name in ['names.json', 'master.json', 'ui.json', 'master-bindings.json']}
     scenarios = []
-    for path in sorted((folder / 'novels').glob('*.json')):
+    for path in sorted((folder / 'novels').glob('*.json'), key=lambda path: path.name):
         document = read_json(path)
         require(document['schema'] == 'monmusu-reviewed-novel-v1', 'Invalid reviewed Novel schema')
         require(all(row['review_status'] == 'reviewed' and row['policy_sha256'] == POLICY_SHA256 for row in document['rows']),
