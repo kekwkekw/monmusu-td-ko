@@ -12,20 +12,68 @@ internal static class Hooks
         try { action(); }
         catch (Exception ex) { P.Log.LogWarning("MM_HOOK_FAILED: " + ex); }
     }
-    public static void BookReady(AdvImportBook __instance) => Guard(() =>
+    static readonly HashSet<string> unavailableThisEntry = new(StringComparer.Ordinal);
+    static long entryStart;
+    static TimeSpan Remaining => TimeSpan.FromMilliseconds(Math.Max(0, 10000 -
+        (System.Diagnostics.Stopwatch.GetTimestamp() - entryStart) * 1000.0 / System.Diagnostics.Stopwatch.Frequency));
+    public static void StoryStarting(StoryData __0) => Guard(() =>
     {
-        var grids = __instance.ImportGridList;
-        if (grids == null) return;
-        for (int i = 0; i < grids.Count; i++) Apply(grids[i]);
+        entryStart = System.Diagnostics.Stopwatch.GetTimestamp();
+        unavailableThisEntry.Clear();
+        _ = P.Novels.PrepareAsync(__0.scenario_name);
+        P.Log.LogInfo("MM_NOVEL_ENTRY scenario=" + __0.scenario_name + " generation=" + P.Package!.Identity);
     });
+    // Also covers scene entry paths that do not use the gallery's PlayStoryAdv.
+    // No blocking occurs before this boot boundary; all subsequent grids share this deadline.
+    public static void SceneBooting() => Guard(() =>
+    {
+        entryStart = System.Diagnostics.Stopwatch.GetTimestamp();
+        unavailableThisEntry.Clear();
+    });
+    public static void ChapterStarting(AdvChapterData __instance) => Guard(() =>
+    {
+        var books = __instance.dataList;
+        if (books == null) return;
+        for (int b = 0; b < books.Count; b++)
+        {
+            var grids = books[b]?.importGridList;
+            if (grids == null) continue;
+            for (int g = 0; g < grids.Count; g++)
+                if (grids[g] is { } grid && P.Novels.ScenarioForGrid(grid.Name) is { } scene)
+                    _ = P.Novels.PrepareAsync(scene);
+        }
+    });
+    public static void ScenarioStarting(AdvScenarioData __instance) => Guard(() =>
+    {
+        if (__instance.DataGrid is { } grid) Ensure(P.Novels.ScenarioForGrid(grid.Name) ?? __instance.name, grid.Name);
+    });
+    static void Ensure(string scenario, string grid)
+    {
+        if (unavailableThisEntry.Contains(grid) || P.Novels.ForGrid(grid) != null) return;
+        if (entryStart == 0) entryStart = System.Diagnostics.Stopwatch.GetTimestamp();
+        var task = P.Novels.PrepareAsync(scenario);
+        try
+        {
+            var ready = task.WaitAsync(Remaining).GetAwaiter().GetResult();
+            if (ready == null || !ready.HasGrid(grid)) unavailableThisEntry.Add(grid);
+        }
+        catch (TimeoutException)
+        {
+            unavailableThisEntry.Add(grid);
+            P.Log.LogWarning($"MM_NOVEL_DEADLINE scenario={scenario} grid={grid}; original commands for this entry");
+        }
+    }
     public static void BeforeCommands(AdvImportScenarioSheet __instance) => Guard(() => Apply(__instance));
 
     static void Apply(AdvImportScenarioSheet grid)
     {
-        var package = P.Package;
-        if (package == null || grid == null) return;
+        if (grid == null) return;
         string name = grid.Name;
-        if (!package.HasGrid(name))
+        if (unavailableThisEntry.Contains(name)) return;
+        if (P.Novels.ScenarioForGrid(name) is { } scene) Ensure(scene, name);
+        if (unavailableThisEntry.Contains(name)) return;
+        var package = P.Novels.ForGrid(name);
+        if (package == null)
         {
             if (P.LogUnmatched && reported.Add("missing:" + name)) P.Log.LogInfo("MM_GRID_UNTRANSLATED " + name);
             return;
@@ -49,7 +97,10 @@ internal static class Hooks
                 case MatchKind.Apply:
                     // Only the Text array element changes, before Utage constructs commands/TextData.
                     // Arg1 character IDs, jumps, Voice, PageCtrl and the on-disk book remain original.
-                    cells[match.TextColumn] = match.Translation!;
+                    // Il2CppStringArray.set_Item in the installed interop writes a raw pointer
+                    // without a GC write barrier. Use the native Array setter, as Master does.
+                    var replacement = new Il2CppSystem.String(Il2CppInterop.Runtime.IL2CPP.ManagedStringToIl2Cpp(match.Translation!));
+                    new Il2CppSystem.Array(cells.Pointer).SetValue(replacement, match.TextColumn);
                     applied++;
                     break;
                 case MatchKind.AlreadyApplied: already++; break;

@@ -42,6 +42,68 @@ void WritePackage(string folder)
 try
 {
     WritePackage(root);
+    {
+        byte[] png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jY9sAAAAASUVORK5CYII=");
+        string digest = TranslationPackage.Hash(png);
+        var image = new ImageEntry { Id = "sample", Kind = "sprite", Name = "repeated-name", Width = 1, Height = 1,
+            File = "images/" + digest + ".png", Sha256 = digest, Bytes = png.Length,
+            SourceIds = new[] { "source:1" }, ContextSuffixes = new[] { "Gallery/Label" },
+            SourceTextures = new[] { new ImageTextureIdentity { Name = "original-atlas", Width = 2048, Height = 2048 } },
+            Jp = "原文", Ko = "번역", ReviewStatus = "reviewed", ReviewId = "test-review" };
+        var images = new ImageCatalog { Schema = "monmusu-images-v1", Entries = new() { image } };
+        byte[] CatalogBytes() => JsonSerializer.SerializeToUtf8Bytes(images, jsonOptions);
+        Test("Image selectors distinguish repeated names by component and original texture", () =>
+        {
+            var c = ImageCatalog.Parse(CatalogBytes());
+            Check(c.Match("sprite", image.Name, 1, 1, "Canvas/Gallery/Label", "original-atlas", 2048, 2048) != null, "valid target missed");
+            Check(c.Match("sprite", image.Name, 1, 1, "Canvas/Shop/Label", "original-atlas", 2048, 2048) == null, "wrong screen matched");
+            Check(c.Match("sprite", image.Name, 1, 1, "Canvas/Gallery/Label", "new-atlas", 2048, 2048) == null, "new source revision matched");
+            c.Entries.Add(new ImageEntry { Id = "conflict", Kind = image.Kind, Name = image.Name, Width = 1, Height = 1,
+                ContextSuffixes = image.ContextSuffixes, SourceTextures = image.SourceTextures });
+            Check(c.Match("sprite", image.Name, 1, 1, "Canvas/Gallery/Label", "original-atlas", 2048, 2048) == null, "ambiguous target selected");
+        });
+        Test("Image content drift, wrong dimensions and unreviewed catalogs are rejected", () =>
+        {
+            Check(image.Matches(png), "valid PNG rejected");
+            byte[] changed = (byte[])png.Clone(); changed[^1] ^= 1;
+            Check(!image.Matches(changed), "modified PNG accepted");
+            image.Width = 2; Check(!image.Matches(png), "wrong canvas accepted"); image.Width = 1;
+            image.ReviewStatus = "pending"; Throws(() => ImageCatalog.Parse(CatalogBytes())); image.ReviewStatus = "reviewed";
+            string file = image.File; image.File = "../escape.png"; Throws(() => ImageCatalog.Parse(CatalogBytes())); image.File = file;
+        });
+        Directory.CreateDirectory(Path.Combine(root, "images"));
+        File.WriteAllBytes(Path.Combine(root, image.File), png);
+        File.WriteAllBytes(Path.Combine(root, "images.json"), CatalogBytes());
+        var manifest = TranslationPackage.ReadManifest(File.ReadAllBytes(Path.Combine(root, "manifest.json")));
+        manifest.Images = new() { Path = "images.json", Sha256 = TranslationPackage.Hash(CatalogBytes()) };
+        manifest.ImageFiles.Add(new() { Path = image.File, Sha256 = digest });
+        File.WriteAllBytes(Path.Combine(root, "manifest.json"), JsonSerializer.SerializeToUtf8Bytes(manifest, jsonOptions));
+        Test("Image publication joins the verified package and interrupted download keeps active version", () =>
+        {
+            Check(TranslationPackage.Load(root).Images!.Catalog.Entries.Count == 1, "images not loaded");
+            string cache = Path.Combine(root, "image-cache");
+            using (var client = new HttpClient(new LocalHandler(root)))
+                PackageCache.RefreshAsync(client, new Uri("https://example.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult();
+            string active = File.ReadAllText(Path.Combine(cache, "active.txt"));
+            // A changed image is required: unchanged validated bytes must not be requested again.
+            image.File = "images/changed.png";
+            image.Sha256 = new string('b', 64);
+            var changedCatalog = CatalogBytes();
+            File.WriteAllBytes(Path.Combine(root, "images.json"), changedCatalog);
+            manifest.Images!.Sha256 = TranslationPackage.Hash(changedCatalog);
+            manifest.ImageFiles = new() { new() { Path = image.File, Sha256 = image.Sha256 } };
+            File.WriteAllBytes(Path.Combine(root, "manifest.json"), JsonSerializer.SerializeToUtf8Bytes(manifest, jsonOptions));
+            using (var client = new HttpClient(new LocalHandler(root, image.File)))
+            {
+                bool failed = false;
+                try { PackageCache.RefreshAsync(client, new Uri("https://example.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult(); }
+                catch (HttpRequestException) { failed = true; }
+                Check(failed && File.ReadAllText(Path.Combine(cache, "active.txt")) == active, "interrupted image set became active");
+            }
+            Check(PackageCache.LoadPreferred(root, cache, _ => { }, false).Images!.Catalog.Entries.Count == 1, "complete image cache unavailable");
+        });
+        WritePackage(root);
+    }
     var package = TranslationPackage.Load(root);
     Test("Duplicate JP remains row-specific", () => Check(package.Match("exact-grid ", 1, 1, document.Rows[0].SourceCells).Translation != package.Match("exact-grid ", 2, 2, document.Rows[1].SourceCells).Translation, "collapsed duplicate JP"));
     Test("HOLD remains original and pending row has no lookup", () =>
@@ -114,42 +176,34 @@ try
         Throws(() => MasterUiTranslations.ValidatePair("<b>残り2</b>\n{0}", "남음2\n{0}"));
         MasterUiTranslations.ValidatePair("<b>残り2</b>\n{0}", "<b>남음2</b>\n{0}");
     });
-    Test("CDN complete update and interrupted update retain cache", () =>
-    {
-        string cache = Path.Combine(root, "cache");
-        using var client = new HttpClient(new LocalHandler(root));
-        var loaded = PackageCache.RefreshAsync(client, new Uri("https://unit.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult();
-        Check(loaded.RowCount == 3, "cache incomplete");
-        string pointer = File.ReadAllText(Path.Combine(cache, "active.txt"));
-        File.AppendAllText(Path.Combine(root, "names.json"), " ");
-        Throws(() => PackageCache.RefreshAsync(client, new Uri("https://unit.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult());
-        Check(File.ReadAllText(Path.Combine(cache, "active.txt")) == pointer, "corrupt update replaced active package");
-        Check(PackageCache.LoadPreferred(root, cache, _ => { }).RowCount == 3, "previous cache lost");
-        WritePackage(root);
-        File.WriteAllText(Path.Combine(cache, "active.txt"), "../invalid");
-        Check(PackageCache.LoadPreferred(root, cache, _ => { }).RowCount == 3, "bundled fallback failed");
-    });
-    Test("Network interruption after partial download preserves published version", () =>
-    {
-        string cache = Path.Combine(root, "network-cache");
-        using var valid = new HttpClient(new LocalHandler(root));
-        PackageCache.RefreshAsync(valid, new Uri("https://unit.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult();
-        string pointer = File.ReadAllText(Path.Combine(cache, "active.txt"));
-        using var broken = new HttpClient(new LocalHandler(root, "novels/test.json"));
-        bool failed = false;
-        try { PackageCache.RefreshAsync(broken, new Uri("https://unit.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult(); }
-        catch (HttpRequestException) { failed = true; }
-        Check(failed && File.ReadAllText(Path.Combine(cache, "active.txt")) == pointer, "partial download published");
-        Check(PackageCache.LoadPreferred(root, cache, _ => { }).RowCount == 3, "published cache damaged");
-        // Successful update also exercises atomic replacement when an active pointer already exists.
-        PackageCache.RefreshAsync(valid, new Uri("https://unit.invalid/"), cache, CancellationToken.None).GetAwaiter().GetResult();
-        Check(File.ReadAllText(Path.Combine(cache, "active.txt")) != pointer, "completed second update not published");
-    });
+    passed += CacheTests.Run(root);
 
     if (args.Length >= 1)
     {
         var actual = TranslationPackage.Load(Path.GetFullPath(args[0]));
         Test("Exported approved package loads", () => Check(actual.RowCount > 0, "empty actual package"));
+        Test("All exported scenes load lazily with exact source and per-row HOLD", () =>
+        {
+            var common = TranslationPackage.Load(Path.GetFullPath(args[0]), false);
+            Check(common.RowCount == 0, "common startup parsed Novel rows");
+            int translated = 0, held = 0;
+            foreach (var entry in common.Manifest.Scenarios)
+            {
+                var bytes = File.ReadAllBytes(TranslationPackage.ResolvePath(args[0], entry.Path));
+                var document = TranslationPackage.Parse<ReviewedNovel>(bytes);
+                var scene = common.WithNovel(entry, bytes);
+                foreach (var row in document.Rows)
+                {
+                    var header = document.Headers.Single(h => h.GridIndex == row.GridIndex && h.HeaderRow == row.HeaderRow);
+                    var match = scene.Match(header.GridName, row.RowIndex, row.SerializedRowIndex ?? 0, row.SourceCells);
+                    Check(match.Kind == (row.Hold == true ? MatchKind.Hold : MatchKind.Apply), "actual lazy row mismatch: " + row.RowId);
+                    if (row.Hold == true) { Check(match.Translation == null, "actual HOLD changed text"); held++; }
+                    else translated++;
+                }
+            }
+            Check(translated + held == actual.RowCount, "lazy/eager row coverage differs");
+            Console.WriteLine($"ACTUAL scenes={common.Manifest.Scenarios.Count} translated={translated} hold={held} names={common.NameCount}");
+        });
         if (args.Length >= 2)
         {
             var book = JsonNode.Parse(File.ReadAllBytes(args[1]))!.AsObject();

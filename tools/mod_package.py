@@ -31,7 +31,7 @@ def export(root, destination):
                 continue
             relative = 'novels/' + path.name
             files[relative] = path.read_bytes()
-            scenarios.append({'scenario_name': result['scenario_name'], 'path': relative,
+            scenarios.append({'scenario_name': result['scenario_name'], 'path': relative, 'grid_names': build_manifests.approved_grids(result),
                               'sha256': hashlib.sha256(files[relative]).hexdigest()})
             total += len(result['rows'])
             held += sum(row['hold'] for row in result['rows'])

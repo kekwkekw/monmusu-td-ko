@@ -7,6 +7,7 @@ public sealed class FileEntry
     [JsonPropertyName("path")] public string Path { get; set; } = "";
     [JsonPropertyName("sha256")] public string Sha256 { get; set; } = "";
     [JsonPropertyName("scenario_name")] public string? ScenarioName { get; set; }
+    [JsonPropertyName("grid_names")] public List<string>? GridNames { get; set; }
 }
 
 public sealed class RuntimeManifest
@@ -18,8 +19,11 @@ public sealed class RuntimeManifest
     [JsonPropertyName("master")] public FileEntry? Master { get; set; }
     [JsonPropertyName("ui")] public FileEntry? Ui { get; set; }
     [JsonPropertyName("master_bindings")] public FileEntry? MasterBindings { get; set; }
+    [JsonPropertyName("images")] public FileEntry? Images { get; set; }
+    [JsonPropertyName("image_files")] public List<FileEntry> ImageFiles { get; set; } = new();
     [JsonIgnore] public IEnumerable<FileEntry> Files => new[] { Names }.Concat(Scenarios)
-        .Concat(new[] { Master, Ui, MasterBindings }.Where(x => x != null).Cast<FileEntry>());
+        .Concat(new[] { Master, Ui, MasterBindings, Images }.Where(x => x != null).Cast<FileEntry>()).Concat(ImageFiles);
+    [JsonIgnore] public IEnumerable<FileEntry> StartupFiles => Files.Except(Scenarios);
 }
 
 public sealed class NovelHeader

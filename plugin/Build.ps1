@@ -53,6 +53,11 @@ try {
     foreach ($name in @('MonmusuMod.dll', 'MonmusuMod.Core.dll')) {
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot "MonmusuMod/bin/Release/net6.0/$name") -Destination (Join-Path $package $name) -Force
     }
+    $thirdParty = Join-Path $package 'THIRD_PARTY'
+    New-Item -ItemType Directory -Path $thirdParty -Force | Out-Null
+    Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'THIRD_PARTY') -File | ForEach-Object {
+        Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $thirdParty $_.Name) -Force
+    }
     if ($FontBundle) {
         New-Item -ItemType Directory -Path (Join-Path $package 'fonts') -Force | Out-Null
         Copy-Item -LiteralPath (Resolve-Path -LiteralPath $FontBundle).Path -Destination (Join-Path $package 'fonts/RHR_Medium_GFSAFE_ADH.bundle') -Force
@@ -68,7 +73,7 @@ try {
         $relative = [IO.Path]::GetRelativePath((Join-Path $root 'dist/MonmusuMod'), $_.FullName).Replace('\','/')
         $files[$relative] = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
     }
-    $report = [ordered]@{ status='BUILT_STATIC_ONLY'; version='0.2.0'; core_tests='PASSED';
+    $report = [ordered]@{ status='BUILT_STATIC_ONLY'; version='0.4.0'; core_tests='PASSED';
         extracted_book_test=([bool]$Book); game_execution='NOT_RUN'; game_installation='NOT_RUN';
         sha256=$files }
     $report | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $root 'dist/MonmusuMod/BUILD.json') -Encoding utf8
