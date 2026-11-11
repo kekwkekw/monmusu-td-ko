@@ -34,7 +34,9 @@ Push-Location $root
 try {
     & (Join-Path $PSScriptRoot 'Inspect-Game.ps1') -GameDir $game
     $package = Join-Path $root 'dist/MonmusuMod/BepInEx/plugins/MonmusuMod'
-    & $Python -X utf8 tools/update/cli.py mod-package --out "$package/data" --report work/plugin-analysis/package-export.json
+    $packageArguments = @('--out', "$package/data", '--report', 'work/plugin-analysis/package-export.json')
+    if (-not (Test-Path -LiteralPath 'translation/state/catalog.json')) { $packageArguments += '--published' }
+    & $Python -X utf8 tools/update/cli.py mod-package @packageArguments
     Check-Exit 'Runtime package export'
     $testProject = Join-Path $PSScriptRoot 'MonmusuMod.Tests/MonmusuMod.Tests.csproj'
     $pluginProject = Join-Path $PSScriptRoot 'MonmusuMod/MonmusuMod.csproj'

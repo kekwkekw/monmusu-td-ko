@@ -10,6 +10,8 @@ GCMod를 참고한 Image/Sprite 및 RawImage 교체는 `monmusu-images-v1` 카�
 
 Python 3.14+, .NET SDK 9(또는 net6.0을 빌드할 수 있는 SDK), .NET 6 런타임, 기존 게임의 BepInEx core/interop 참조가 필요하다. 원본 DLL은 저장소와 설치 패키지에 복제하지 않는다.
 
+공개 체크아웃에서 빌드하면 게시된 manifest와 해시가 일치하는 파일을 패키지에 넣는다. 로컬 번역 카탈로그가 있는 작성 환경에서는 기존대로 원본과 반영 상태를 검증한다.
+
 ```powershell
 pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 ```
