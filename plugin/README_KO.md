@@ -1,10 +1,16 @@
 # 몬타디 한국어 번역 플러그인
 
-BepInEx 6 / IL2CPP용 `MonmusuMod` 0.2.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject master와 Unity Text/TMP UI도 치환한다. 현재 패키지는 `10001A0_Nml`의 PRO 검수 26행·이름 2건과 Codex가 검수한 실기용 UI 43건·master 8건이다. [0.2.0 UI/master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)에 검증 범위를 구분했다. 전체 UI/master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
+BepInEx 6 / IL2CPP용 `MonmusuMod` 0.4.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject master와 Unity Text/TMP UI도 치환한다. 공개 Novel은 4,146장면·159,834행(번역 159,817행, 승인 HOLD 17행)·Names 776건이며, UI/master는 기존 부분 번역을 사용한다. [0.2.0 UI/master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)은 당시 표본의 기록이다. 전체 UI/master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
+
+GCMod를 참고한 Image/Sprite 및 RawImage 교체는 `monmusu-images-v1` 카탈로그의 원본 텍스처와 UI 경로를 대조한다. 공개 패키지는 manifest의 `images`와 `image_files`를 사용한다. 별도로 설치한 로컬 카탈로그는 `[Images] LocalDirectory`로 선택할 수 있다. 카탈로그가 없는 패키지도 지원한다. [참고 구현과 라이선스](THIRD_PARTY/README.md)
+
+0.4.0의 최종 DLL은 진단 없이 도감 재생·스킵·재진입을 통과했다. 같은 세션의 메인 저장 복원과 장면 요청 실패 시 원문 복원도 확인했다. [CDN 로더 실기 기록](CDN_RUNTIME_TEST_KO.md)
 
 ## 빌드
 
 Python 3.14+, .NET SDK 9(또는 net6.0을 빌드할 수 있는 SDK), .NET 6 런타임, 기존 게임의 BepInEx core/interop 참조가 필요하다. 원본 DLL은 저장소와 설치 패키지에 복제하지 않는다.
+
+공개 체크아웃에서 빌드하면 게시된 manifest와 해시가 일치하는 파일을 패키지에 넣는다. 로컬 번역 카탈로그가 있는 작성 환경에서는 기존대로 원본과 반영 상태를 검증한다.
 
 ```powershell
 pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
@@ -16,8 +22,9 @@ pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 
 ## 적용 방식
 
-- `AdvImportBook.BootInit` 후와 `AdvImportScenarioSheet.CreateCommandList` 전에 exact grid 이름, 헤더, 배열 행 위치, serialized rowIndex, 원문 셀 전체를 대조한다.
+- `StoryDataBase.PlayStoryAdv`에서 대상 장면을 준비하고, `AdvChapterData.BootInit`과 `AdvScenarioData.Init`에서 함께 컴파일할 장면을 확인한다. `AdvImportScenarioSheet.CreateCommandList` 직전에 exact grid 이름, 헤더, 배열 행 위치, serialized rowIndex, 원문 셀 전체를 대조한다. 실기에서 호출되지 않은 `AdvImportBook.BootInit`에는 의존하지 않는다.
 - 승인된 Text 셀만 메모리에서 치환한다. 같은 JP의 다른 행은 합치지 않으며, 재초기화는 중복 적용하지 않는다. HOLD/미검수/원문 불일치는 현재 게임 텍스트를 유지한다.
+- 문자열 배열 기록은 native `Il2CppSystem.Array.SetValue`를 사용한다. 설치 interop의 `Il2CppStringArray` 인덱서에는 GC write barrier가 없어 직접 포인터 쓰기를 사용하지 않는다.
 - 이름은 대사창/백로그의 표시 Text에서만 exact Names로 바꾼다. 캐릭터 ID인 Arg1, 선택지 분기, Voice, PageCtrl은 바꾸지 않는다.
 - 원본 book 파일을 고치지 않는다. Utage의 본문 파싱, 타자 표시, 백로그, 저장 과정에는 변환된 Text가 전달되는 구조다. 해당 경로의 실제 호출과 저장/로드 동작은 실기 확인 항목이다.
 - 한글이 있는 Utage 본문·이름·선택지·백로그에는 설치된 `Malgun Gothic` 동적 폰트를 적용한다.
@@ -40,8 +47,10 @@ pwsh -File plugin/Install.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 
 `BepInEx/LogOutput.log`에서 확인할 항목:
 
-- `MM_READY`: 패키지, 시나리오/행/이름/UI/master 수, hook 13개.
-- `MM_CDN_READY`: 다운로드와 전체 해시 검증을 끝내고 현재 실행에서 선택한 패키지.
+- `MM_READY`: 선택한 패키지, 등록 시나리오 수와 실제 로드 수, 이름/UI/master 수, hook 21개. 시작의 `loaded_scenarios=0 rows=0`은 정상이다.
+- `MM_CDN_READY` / `MM_CDN_STARTUP`: 공통 데이터 검증 후 선택한 세대와 CDN 시작 대기 시간.
+- `MM_CDN_REQUEST` / `MM_CACHE_HIT` / `MM_CACHE_REUSE`: 실제 요청과 해시가 일치하는 캐시 재사용.
+- `MM_NOVEL_READY` / `MM_NOVEL_FAILED` / `MM_NOVEL_DEADLINE`: 개별 장면 준비, 실패 또는 진입 대기 만료. 만료된 진입에서는 해당 grid를 원문으로 컴파일한다.
 - `MM_MASTER_APPLIED`: 변경한 master 에셋과 필드 수. `MM_MASTER_FIELD_MISSING`/`MM_MASTER_FAILED`는 구조 변경 또는 실패.
 - `MM_UI_APPLIED`: UI renderer와 exact JP 해시. `MM_TMP_FONT_READY`는 TMP 한글 fallback 준비.
 - `MM_GRID`: 첫 로드에서 `applied=26`, `mismatch=0`; 다음 준비 경로에서는 `already=26`이 정상이다.
@@ -62,7 +71,11 @@ python -X utf8 tools/update/cli.py mod-package
 
 승인된 로컬 결과만 runtime manifest와 함께 export한다. 행 기반 JSON을 그대로 사용하며 JP dictionary로 다시 합치지 않는다. 각 파일의 SHA-256과 행별 원문/제어 토큰을 검증한다.
 
-`Translation.CdnBaseUrl` 기본값은 `https://raw.githubusercontent.com/kekwkekw/monmusu-td-ko/main/translations/ko/`다. 저장소는 2026-11-01 사용자가 public으로 전환했다. 시작 시 hook 설치 전에 manifest와 데이터 전체를 다운로드·검증하고 현재 실행에 적용한다. HTTP 요청 제한 시간은 20초이며 다운로드 실패/손상/중단 시 기존 검증 캐시 또는 동봉 데이터를 사용한다. 캐시는 `BepInEx/cache/MonmusuMod/`다. 토큰은 필요하지 않다. manifest 외에 names, novels, master, ui, master-bindings가 하나의 검증 단위다.
+`Translation.CdnBaseUrl` 기본값은 `https://raw.githubusercontent.com/kekwkekw/monmusu-td-ko/main/translations/ko/`다. 시작에는 manifest와 Names/UI/master/이미지 공통 데이터만 검증한다. Novel 본문은 읽거나 받지 않는다. 같은 manifest와 정상 캐시로 재시작하면 manifest만 요청하고 기존 버전 폴더를 재사용한다. CDN 시작 작업 전체의 대기는 최대 15초이고 HTTP 요청별 상한은 10초다. 실패하면 이전 검증 캐시 또는 동봉 공통 데이터를 선택한다. 캐시는 `BepInEx/cache/MonmusuMod/`이며 토큰은 필요하지 않다.
+
+선택한 manifest·Names·정책은 게임 실행 동안 고정한다. Novel은 필요한 장면만 선택한 해시로 읽고, 없거나 손상된 파일만 받는다. 같은 장면의 동시 요청은 하나로 합치고 실패 후 30초 동안 반복 요청을 억제한다. 재생 진입마다 모든 grid가 최대 10초의 대기 예산을 공유한다. 시간 내 준비하지 못한 grid는 원문을 유지하며, 늦게 완료된 결과로 이미 생성한 명령을 덮어쓰지 않는다. 다시 진입하면 준비된 메모리/디스크 캐시를 사용한다. 같은 세션의 저장 복원은 이미 컴파일된 명령을 사용하므로 초기화 후크 재호출에 의존하지 않는다. 차가운 프로세스에서 저장 파일만으로 장면을 준비하는 기능은 추가하지 않았다.
+
+manifest의 선택적 `grid_names`는 검수 행이 참조하는 원본 전체 grid 이름이다. 공백·대소문자·Unicode를 정규화하지 않으며 중복 소유자는 거부한다. 이 필드가 없는 기존 v1 manifest도 지원한다. 이 경우 실제 `StoryData.scenario_name`과 `AdvScenarioData.name`으로 파일을 준비한 뒤 검증된 본문의 전체 grid 이름을 등록한다. 다른 세대 파일의 해시가 다르면 이전 번역으로 대체하지 않는다. 정책 불일치, 원문 변경, HOLD 검증은 지연 로드에서도 동일하게 적용한다.
 
 CDN 설정을 비우면 기존 다운로드 캐시보다 `DataDirectory`의 로컬 패키지를 사용한다. 따라서 설치용 데이터를 새로 복사한 뒤 오래된 캐시가 그 결과를 덮어쓰지 않는다.
 

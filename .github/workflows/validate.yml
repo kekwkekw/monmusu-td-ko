@@ -24,10 +24,14 @@ jobs:
           python-version: '3.14'
       - name: Check frozen policy and run synthetic regression tests
         run: python -X utf8 tools/update/cli.py preflight --report reports/preflight.json
-      - name: Verify Master/UI authoring and public descriptors
+      - name: Verify Master/UI authoring, image catalogs and public descriptors
         run: |
           python -X utf8 -m unittest discover -s tools -p test_ui_workflow.py -v
+          python -X utf8 -m unittest discover -s tools -p test_image_catalog.py -v
+          python -X utf8 -m unittest discover -s tools -p test_runtime_grid_index.py -v
           python -X utf8 tools/build_manifests.py --check
+      - name: Export the verified runtime snapshot from a clean checkout
+        run: python -X utf8 tools/update/cli.py mod-package --published
 
   runtime-core-tests:
     name: Runtime core (${{ matrix.os }})

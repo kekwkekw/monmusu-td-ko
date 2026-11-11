@@ -1,0 +1,101 @@
+{
+  "schema": "monmusu-cdn-runtime-test-v1",
+  "date": "2026-11-11",
+  "version": "0.4.0",
+  "status": "VERIFIED_SCOPED_NATIVE_AND_DIAGNOSTICS_REMOVED",
+  "static": {
+    "core_checks_passed": 29,
+    "python_grid_tests_passed": 2,
+    "python_ui_tests_passed": 7,
+    "native_hooks": 21,
+    "scenes": 4146,
+    "translated_rows": 159817,
+    "hold_rows": 17,
+    "names": 776,
+    "final_build_log_sha256": "1c9f9260201127aa974aaa8a179658a68e9b09a4d0162077260db1af9de6e857"
+  },
+  "native_final": {
+    "startup_ms": 186,
+    "boot_novel_requests": 0,
+    "boot_loaded_scenes": 0,
+    "network_requests": [
+      "manifest.json"
+    ],
+    "gallery_applied": [
+      26,
+      44
+    ],
+    "gallery_reentry_already": [
+      26,
+      44
+    ],
+    "mismatches": 0,
+    "skip_and_return": true,
+    "diagnostic_plugins": 0,
+    "log": "final-clean-session.log",
+    "log_sha256": "4a5cf1ea425b6709f5bd8de704cfed219b2af1c41dab398359af84f18550fe3b"
+  },
+  "native_save": {
+    "startup_ms": 453,
+    "scenario": "1101011Nml",
+    "applied": 117,
+    "sequence": [
+      1,
+      3,
+      1,
+      2
+    ],
+    "native_gc_collections": 2,
+    "extra_novel_requests": 0,
+    "log": "final-save-gc-session.log",
+    "log_sha256": "3e42e7fc3ffa46f63b00a7c37896672c49499b51e0b3e5d97e424d4fd1b2fa30",
+    "method": "Native Utage API through isolated diagnostic helper; not normal save UI"
+  },
+  "native_fault": {
+    "startup_ms": 120,
+    "scenario_requests": 1,
+    "scenario_applied": 0,
+    "original_text_save_restore_and_backlog": true,
+    "configured_scene_timeout_seconds": 10,
+    "exact_elapsed_time_measured": false,
+    "old_different_hash_scene_fallback": false,
+    "log": "timeout-original-session.log",
+    "log_sha256": "6c5602446e7c92fd786216ff038fbd9d8e5b5e678ab091ef41c55bc8f025ed5b"
+  },
+  "crash": {
+    "count": 1,
+    "phase": "earlier candidate with 38 diagnostic hooks",
+    "code": "0xc0000005",
+    "location": "GameAssembly.dll+0x2a6809",
+    "root_cause": "UNCONFIRMED",
+    "change": "Native Array.SetValue replaces raw Il2CppStringArray setter without GC write barrier",
+    "reproduced_in_final_sessions": false
+  },
+  "generations": {
+    "local_exact_grid_aliases": 4151,
+    "hold_policy": "b5e7fd3e9caca00c1d40cf24880559ba1b79d6fec6b53af3006698eb26c34f6b",
+    "native_public_manifest": "2e6c1434d905982c259d6d32efd26b83192f97c3e1f81fa72c0b3b239612c32f",
+    "publication_manifest": "f2c953c8e1dd56721d131fe6bdefab2b215f442b2ebf69c1acf4f00a004415a3"
+  },
+  "limitations": [
+    "Not every scene visually replayed",
+    "17 HOLD rows verified mechanically, not their native screens",
+    "Voice source fields preserved; actual audio not listened to",
+    "Only same-process already-compiled-scene native save API tested",
+    "Cross-scene and cold-process save restore not verified",
+    "Initial native crash cause remains unconfirmed"
+  ],
+  "evidence_summary_sha256": "02de6539c348b589da3ac450a0c9b2f4e375ae440020a0e3a2d8d2a8708bc3c0",
+  "binary_sha256": {
+    "MonmusuMod.dll": "1e29c393176f5535d92a98962fc4dc3c254b9eed67ece5a1cfc7a5f2d3a1e78c",
+    "MonmusuMod.Core.dll": "848ea826f2b3e946bc2963097030d26850651c4a85481dc38f84d9e7e344a16f"
+  },
+  "native_cleanup": {
+    "game_running": false,
+    "active_diagnostic_or_xunity_dlls": 0,
+    "fault_cache_removed_from_game": true
+  },
+  "report": "CDN_RUNTIME_TEST_KO.md",
+  "report_sha256": "c3d3fc43fdaa6fc4b624bed3ddcd29c05f9499cc809f85335f0f5522e61b917a",
+  "evidence_custody": "Original logs and dump retained in the local test workspace."
+}

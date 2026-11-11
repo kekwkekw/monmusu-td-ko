@@ -6,8 +6,17 @@ from pathlib import Path
 from novel_storage import atomic_write, encode, read_json, require
 from novel_workflow import policy, POLICY_SHA256
 import ui_workflow
+import image_catalog
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def approved_grids(document):
+    """Only headers referenced by reviewed rows become routing aliases."""
+    used = {(row['grid_index'], row['header_row_index_0based']) for row in document['rows']}
+    headers = {(h['grid_index'], h['header_row_index_0based']): h for h in document['headers']}
+    require(used <= headers.keys(), 'Reviewed row missing its header')
+    return sorted({headers[key]['grid_name'] for key in used})
 
 
 def payloads(root):
@@ -23,13 +32,20 @@ def payloads(root):
                 'Unreviewed Novel in publication')
         relative = 'novels/' + path.name
         files[relative] = path.read_bytes()
-        scenarios.append({'scenario_name': document['scenario_name'], 'path': relative,
+        scenarios.append({'scenario_name': document['scenario_name'], 'path': relative, 'grid_names': approved_grids(document),
                           'sha256': hashlib.sha256(files[relative]).hexdigest()})
+    aliases = [grid for entry in scenarios for grid in entry['grid_names']]
+    require(len(aliases) == len(set(aliases)) and all(aliases), 'Ambiguous or empty Novel grid alias')
     def entry(name):
         return {'path': name, 'sha256': hashlib.sha256(files[name]).hexdigest()}
     manifest = {'schema': 'monmusu-runtime-manifest-v1', 'policy_sha256': POLICY_SHA256,
                 'names': entry('names.json'), 'scenarios': scenarios, 'master': entry('master.json'),
                 'ui': entry('ui.json'), 'master_bindings': entry('master-bindings.json')}
+    if (folder / 'images.json').exists():
+        image_files = image_catalog.validate(folder)
+        files.update(image_files)
+        manifest['images'] = entry('images.json')
+        manifest['image_files'] = [entry(name) for name in sorted(image_files) if name != 'images.json']
     return files, manifest
 
 
