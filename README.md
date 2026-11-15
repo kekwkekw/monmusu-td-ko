@@ -76,4 +76,4 @@ pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 
 결과는 `dist/MonmusuMod/`에 생성된다. 빌드는 게임 폴더에 설치하지 않는다. 설정, 로컬/CDN 데이터 로딩, 한국어 폰트, 진단 로그 및 후속 실기 확인 절차는 [플러그인 운영 안내](plugin/README_KO.md)를 따른다.
 
-UI/master 전체 원문 85,302쌍과 등장 위치를 `translation/ui/source/`에 공개한다. 현재 번역은 실기용 51건만 Codex가 검수했다. MonmusuMod 0.2.0은 공개 GitHub CDN의 해시 manifest를 받아 Novel·master·UI를 함께 읽는다. 원문 입력, 검수 판정, 게임 배포 파일은 각각 분리되어 있다.
+UI/Master 전체 원문 85,302항목과 등장 위치를 `translation/ui/source/`에 공개한다. Pro 번역과 자체 재검수를 거친 UI 1,183행과 Master 74,567행을 배포하며, 대상에서 제외한 UI 1,616행과 Master 7,936행은 원문으로 유지한다. MonmusuMod는 공개 GitHub CDN의 해시 manifest를 사용해 Novel·Master·UI 번역을 읽는다. 원문 입력, 검수 판정, 게임 배포 파일은 각각 분리되어 있다.
