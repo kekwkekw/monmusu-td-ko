@@ -1,6 +1,6 @@
 # 몬타디 한국어 번역 플러그인
 
-BepInEx 6 / IL2CPP용 `MonmusuMod` 0.4.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject master와 Unity Text/TMP UI도 치환한다. 공개 Novel은 4,146장면·159,834행(번역 159,817행, 승인 HOLD 17행)·Names 776건이며, UI/master는 기존 부분 번역을 사용한다. [0.2.0 UI/master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)은 당시 표본의 기록이다. 전체 UI/master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
+BepInEx 6 / IL2CPP용 `MonmusuMod` 0.4.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject Master와 Unity Text/TMP UI도 치환한다. 공개 Novel은 4,146장면·159,834행(번역 159,817행, 승인 HOLD 17행)·Names 776건이다. UI는 1,183행, Master는 74,567행을 배포한다. [0.2.0 UI/Master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)은 당시 표본의 기록이다. 전체 UI/Master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
 
 GCMod를 참고한 Image/Sprite 및 RawImage 교체는 `monmusu-images-v1` 카탈로그의 원본 텍스처와 UI 경로를 대조한다. 공개 패키지는 manifest의 `images`와 `image_files`를 사용한다. 별도로 설치한 로컬 카탈로그는 `[Images] LocalDirectory`로 선택할 수 있다. 카탈로그가 없는 패키지도 지원한다. [참고 구현과 라이선스](THIRD_PARTY/README.md)
 
@@ -83,7 +83,7 @@ CDN 설정을 비우면 기존 다운로드 캐시보다 `DataDirectory`의 로�
 
 이 게임에서는 OS 동적 Font를 TMP FontEngine으로 가져올 수 없어, TMP 한글 표시에 별도 font bundle이 필요하다. 현재 개인 설치는 기존 GCMod의 `RHR_Medium_GFSAFE_ADH.bundle`을 복사해 사용한다. 원래 GC 설치는 변경하지 않는다. `Build.ps1 -FontBundle <기존 번들 경로>`로 개인 패키지에 넣고, `Font.TmpBundle`은 기본 `fonts/RHR_Medium_GFSAFE_ADH.bundle`을 가리킨다. 이 선택적 빌드에는 추출기 환경의 UnityPy가 필요하다. 두 게임의 TMP 직렬화 버전 차이로 비어 있는 material 참조는 동일 번들 material로 복원하고 게임의 TMP shader를 사용한다.
 
-번들의 `m_PointSize`는 float, 게임의 FaceInfo는 int라서 크기가 0으로 읽힌다. `tools/font_bundle_metadata.py`가 원래 point size와 번들 SHA-256을 `.bundle.metrics.json`에 보존하고, runtime이 두 파일을 대조해 90을 복원한다. 다른 크기를 추측해 강제로 맞추지 않는다. 현재 실기용 UI/master 번역에 필요한 한글은 이 번들의 1,638개 character table에 모두 있다. 추후 번역 확장 시 누락 문자는 `MM_TMP_GLYPH_MISSING`으로 확인한다.
+번들의 `m_PointSize`는 float, 게임의 FaceInfo는 int라서 크기가 0으로 읽힌다. `tools/font_bundle_metadata.py`가 원래 point size와 번들 SHA-256을 `.bundle.metrics.json`에 보존하고, runtime이 두 파일을 대조해 90을 복원한다. 다른 크기를 추측해 강제로 맞추지 않는다. 초기 실기용 UI/Master 표본의 한글은 이 번들의 1,638개 character table에 모두 있었다. 게임에서 누락 문자는 `MM_TMP_GLYPH_MISSING`으로 확인한다.
 
 GCMod와 같이 이 외부 폰트 번들은 Git/CDN 공개 대상에서 제외한다. 공개 소스만 clone한 사용자는 적합한 TMP 폰트를 별도로 준비해야 한다. `dist/MonmusuMod/`는 이전 개인 빌드의 폰트를 유지할 수 있으므로 공개 release 파일로 자동 게시하지 않는다. 글리프와 실제 표시 확인은 런타임 검증에 기록한다.
 
