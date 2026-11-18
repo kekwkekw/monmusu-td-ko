@@ -4,7 +4,7 @@
 
 gctrans와 같이 배포 master는 `{table: {field: {JP: KO}}}`, 일반 UI는 `{JP: KO}`다. 몬타디 master는 JSON 로더 대신 ScriptableObject를 사용하므로 table은 exact asset name, field는 `table[].tab_name` 같은 직렬화 경로다. 별도 `master-bindings.json`에서 native class도 대조한다. 일본어가 들어 있는 ID·kana·scenario_name도 원문 입력에는 보존하지만 번역 대상으로 승인할 수 없다. master 전체를 일반 UI 사전으로 합치지 않는다.
 
-UI_RESTART001과 MASTER001~012에서 Pro 번역과 자체 재검수를 마친 배포 대상은 UI 1,183행과 Master 74,567행이다. 두 작업 모두 HOLD와 미처리는 0행이다. UI 1,616행과 Master 7,936행은 번역 대상 선정 단계에서 원문 유지로 분류했다. Master 원문 유지 항목에는 `help_window_data/table[].helpId` 같은 도움말 조회 키와 `mission_data/table[].target` 같은 미션 대상 ID·분류 키가 포함된다.
+UI_RESTART001과 MASTER001~012에서 Pro 번역과 자체 재검수를 마친 배포 대상은 UI 1,183행과 Master 74,566행이다. 두 작업 모두 HOLD와 미처리는 0행이다. 후속 UI QA에서 실행용 날짜 서식 `yyyy/MM/dd` 1행을 승인된 `keep_source`로 정정해 배포 Master에서 제외했다. UI 1,616행과 Master 7,936행은 번역 대상 선정 단계에서 원문 유지로 분류했다. Master 원문 유지 항목에는 `help_window_data/table[].helpId` 같은 도움말 조회 키와 `mission_data/table[].target` 같은 미션 대상 ID·분류 키가 포함된다.
 
 | 위치 | 내용 |
 | --- | --- |

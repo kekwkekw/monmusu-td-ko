@@ -73,6 +73,16 @@ class UiWorkflowTests(unittest.TestCase):
         row.update(disposition='keep_source', ko='')
         self.assertEqual(self.apply()['keep_source'], 1)
 
+    def test_executable_date_format_requires_keep_source(self):
+        self.write('translation/ui/source/ui.json', {'yyyy/MM/dd': ''})
+        self.review['rows'][0].update(jp='yyyy/MM/dd', ko='yyyy/MM/dd 형식')
+        with self.assertRaisesRegex(ValueError, 'date/time format'):
+            self.apply()
+        self.review['rows'][0].update(disposition='keep_source', ko='')
+        self.assertEqual(self.apply()['keep_source'], 1)
+        self.assertTrue(ui.date_format('HH:mm:ss'))
+        self.assertFalse(ui.date_format('HP'))
+
     def test_stale_overwrite_and_tampered_export_rejected(self):
         self.apply()
         self.review['rows'][0]['ko'] = '확인하기'

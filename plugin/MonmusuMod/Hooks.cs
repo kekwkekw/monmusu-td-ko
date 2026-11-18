@@ -125,12 +125,12 @@ internal static class Hooks
     public static void MessageChanged(AdvUguiMessageWindow __instance) => Guard(() =>
     {
         TranslateLabel(__instance.nameText);
-        P.Fonts.Apply(__instance.Text);
+        P.NovelBodyFonts.Apply(__instance.Text);
     });
     public static void BacklogReady(AdvUguiBacklog __instance) => Guard(() =>
     {
         TranslateLabel(__instance.characterName);
-        P.Fonts.Apply(__instance.text);
+        P.NovelBodyFonts.Apply(__instance.text);
     });
     public static void SelectionReady(AdvUguiSelection __instance) => Guard(() => P.Fonts.Apply(__instance.text));
     static void TranslateLabel(UnityEngine.UI.Text? text)

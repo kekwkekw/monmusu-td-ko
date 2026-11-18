@@ -1,7 +1,7 @@
 {
   "master": {
     "path": "master.json",
-    "sha256": "fadba35b8b72c09f0a3a6d29fdb083150f6f6d437e4229dbec12fecbc44814af"
+    "sha256": "e03a8163512d40f2dc3e8ac18b085366c1d0d62f10dd42b7322f64e78a7d1aa1"
   },
   "master_bindings": {
     "path": "master-bindings.json",
@@ -33190,6 +33190,6 @@
   "schema": "monmusu-runtime-manifest-v1",
   "ui": {
     "path": "ui.json",
-    "sha256": "006262e4254379f6f9ce452b630f7f606acb21d2524e5ca13237ca512ae8ecb4"
+    "sha256": "31a5c5e86e8c73c72038132266164a6a28d5ad3552ca23156007ce85729de978"
   }
 }

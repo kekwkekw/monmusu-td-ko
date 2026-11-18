@@ -84,11 +84,16 @@ public sealed class MasterUiTranslations
                     children.Add(child);
                 }
                 for (int i = 0; i < arrays; i++)
-                    children = children.SelectMany(n => n.Elements() ?? Array.Empty<IMasterNode>()).ToList();
+                    children = children.SelectMany(n =>
+                    {
+                        var elements = n.Elements();
+                        if (elements == null) missingField?.Invoke(field.Key);
+                        return elements ?? Array.Empty<IMasterNode>();
+                    }).ToList();
                 nodes = children;
             }
             foreach (var node in nodes)
-                if (node.Text is { } text && field.Value.TryGetValue(text, out var translated))
+                if (node.Text is { } text && !UiDisplayText.IsDateFormat(text) && field.Value.TryGetValue(text, out var translated))
                 { node.Text = translated; count++; }
         }
         return count;

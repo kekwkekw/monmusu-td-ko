@@ -23,6 +23,8 @@ public sealed class Plugin : BasePlugin
     HttpClient? cdnClient;
     internal ImagePackage? Images { get; private set; }
     internal KoreanFont Fonts { get; private set; } = null!;
+    internal KoreanFont NovelBodyFonts { get; private set; } = null!;
+    internal KoreanFont DecorativeFonts { get; private set; } = null!;
     internal bool LogUnmatched { get; private set; }
     Harmony? harmony;
 
@@ -36,6 +38,8 @@ public sealed class Plugin : BasePlugin
         string cdn = Config.Bind("Translation", "CdnBaseUrl", "https://raw.githubusercontent.com/kekwkekw/monmusu-td-ko/main/translations/ko/", "Public HTTPS directory containing manifest.json; empty uses bundled/local data.").Value;
         string fontName = Config.Bind("Font", "Family", "Malgun Gothic", "Installed Unity dynamic font family used for Korean scenario text.").Value;
         string fontBundle = Config.Bind("Font", "TmpBundle", "fonts/RHR_Medium_GFSAFE_ADH.bundle", "Separately supplied TMP font bundle, relative to this plugin folder.").Value;
+        string novelBodyBundle = Config.Bind("Font", "NovelBodyBundle", "", "Optional embedded Unity Font bundle for Korean Novel body and backlog.").Value;
+        string decorativeBundle = Config.Bind("Font", "DecorativeTmpBundle", "", "Optional Korean TMP fallback for original Kurokane decorative labels.").Value;
         bool useFont = Config.Bind("Font", "Enabled", true, "Apply Korean fonts to translated Text/TMP labels containing Hangul.").Value;
         string localImages = Config.Bind("Images", "LocalDirectory", "", "Optional explicitly installed local image preview catalog; empty uses the verified CDN package images.").Value;
         LogUnmatched = Config.Bind("Diagnostics", "LogUnmatchedGrids", false, "Log encountered grid names without translations for runtime diagnosis.").Value;
@@ -66,6 +70,11 @@ public sealed class Plugin : BasePlugin
             Novels = new NovelSession(selected, (entry, token) => PackageCache.ReadFileAsync(entry, sceneRoot, cache,
                 cdnClient, cdnUri, token, msg => Log.LogInfo(msg), bundled), msg => Log.LogInfo(msg));
             Fonts = new KoreanFont(fontName, Path.IsPathRooted(fontBundle) ? fontBundle : Path.Combine(pluginRoot, fontBundle), useFont, msg => Log.LogInfo(msg), msg => Log.LogWarning(msg));
+            NovelBodyFonts = string.IsNullOrWhiteSpace(novelBodyBundle) ? Fonts : new KoreanFont(fontName, "", useFont,
+                msg => Log.LogInfo(msg), msg => Log.LogWarning(msg), Path.Combine(pluginRoot, novelBodyBundle));
+            DecorativeFonts = string.IsNullOrWhiteSpace(decorativeBundle) ? Fonts : new KoreanFont(fontName,
+                Path.IsPathRooted(decorativeBundle) ? decorativeBundle : Path.Combine(pluginRoot, decorativeBundle), useFont,
+                msg => Log.LogInfo(msg), msg => Log.LogWarning(msg), globalFallback: false);
             Images = package.Images;
             if (!string.IsNullOrWhiteSpace(localImages))
             {
@@ -99,13 +108,15 @@ public sealed class Plugin : BasePlugin
             PatchTo(typeof(TMP_Text), "set_text", typeof(UiHooks), nameof(UiHooks.TmpSet), nameof(UiHooks.TmpReady), typeof(string));
             PatchTo(typeof(TextMeshProUGUI), "OnEnable", typeof(UiHooks), null, nameof(UiHooks.TmpReady));
             PatchTo(typeof(TextMeshProUGUI), "OnPreRenderCanvas", typeof(UiHooks), nameof(UiHooks.TmpReady), null);
+            PatchTo(typeof(cUnitStatusDialog), "Setup", typeof(UiHooks), nameof(UiHooks.StatusStarting), null, typeof(int));
+            PatchTo(typeof(cUnitStatusDialog), "Setup", typeof(UiHooks), nameof(UiHooks.StatusStarting), null, typeof(PlayerData));
             PatchTo(typeof(Image), "set_sprite", typeof(ImageHooks), nameof(ImageHooks.SetSprite), null, typeof(Sprite));
             PatchTo(typeof(Image), "set_overrideSprite", typeof(ImageHooks), nameof(ImageHooks.SetSprite), null, typeof(Sprite));
             PatchTo(typeof(Image), "OnEnable", typeof(ImageHooks), null, nameof(ImageHooks.EnableImage));
             PatchTo(typeof(RawImage), "set_texture", typeof(ImageHooks), nameof(ImageHooks.SetTexture), null, typeof(Texture));
             PatchTo(typeof(MaskableGraphic), "OnEnable", typeof(ImageHooks), null, nameof(ImageHooks.EnableGraphic));
             Log.LogInfo($"MM_IMAGES_READY targets={Images?.Catalog.Entries.Count ?? 0} image_hooks=5");
-            Log.LogInfo($"MM_READY version=0.4.0 package={package.Identity} scenarios={package.Manifest.Scenarios.Count} loaded_scenarios={Novels.LoadedCount} rows={package.RowCount} names={package.NameCount} ui={package.MasterUi.UiCount} master={package.MasterUi.MasterCount} hooks=21");
+            Log.LogInfo($"MM_READY version=0.4.0 package={package.Identity} scenarios={package.Manifest.Scenarios.Count} loaded_scenarios={Novels.LoadedCount} rows={package.RowCount} names={package.NameCount} ui={package.MasterUi.UiCount} master={package.MasterUi.MasterCount} hooks=23");
             Log.LogInfo("MM_DIAGNOSTICS: MM_GRID records source matching; MM_FONT_READY records Korean font initialization. Visual/voice checks are recorded separately.");
             if (Directory.EnumerateFiles(Paths.PluginPath, "XUnity.AutoTranslator*.dll", SearchOption.AllDirectories).Any())
                 Log.LogWarning("MM_OTHER_TRANSLATOR: XUnity AutoTranslator is installed. Its text/font hooks can affect the later visual test; its configuration was not modified.");

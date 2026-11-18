@@ -17,3 +17,5 @@
 메이플스토리 Bold 원본 SHA-256: `d57eaff48a793ff872a0f33bba2943d058d07c81ed64c68054858a287b85811a`.
 
 [공식 배포 및 이용 안내](https://maplestory.nexon.com/Media/Font)의 저작권 안내를 최종 배포 구성에도 포함한다.
+
+2026-11-12 이후 사용자 비교 요청으로 현재 로컬 시나리오 본문·백로그는 RHR Bold 시험 설정을 사용한다. 최초 Medium 선정과 구분한다. 일반 UI RHR Bold / 장식 Maple Bold는 유지하며, [현행 UI 빌드](../plugin/Fonts/README_KO.md)와 [11월 19일 실기](../plugin/UI_DISPLAY_RUNTIME_20261119_KO.md)를 따른다.
