@@ -30,6 +30,11 @@ def numbers(value):
     return re.findall(r'\d+(?:[.,]\d+)*', unicodedata.normalize('NFKC', value))
 
 
+def date_format(value):
+    token = r'(?:yyyy|yy|MM|M|dd|d|HH|H|hh|h|mm|m|ss|s)'
+    return re.fullmatch(token + r'(?:[/ :.-]' + token + r')+', value) is not None
+
+
 def identity(row):
     return json.dumps([row['lane'], row.get('table'), row.get('field'), row['jp']], ensure_ascii=False, separators=(',', ':'))
 
@@ -67,6 +72,7 @@ def outputs(root, decisions):
             continue
         if row['lane'] == 'master':
             require(not structural(table, field), f'Identifier/lookup field is source-only: {table}/{field}')
+        require(not date_format(row['jp']), 'Executable date/time format is source-only; use keep_source')
         ko = row['ko']
         require(isinstance(ko, str) and ko.strip() and ko != row['jp'] and '\0' not in ko, 'Invalid Korean translation')
         require(structure(row['jp']) == structure(ko), 'Control tags/placeholders/newlines changed')

@@ -41,6 +41,48 @@ void WritePackage(string folder)
 }
 try
 {
+    Test("Null TMP buffers, scoped dates and compact labels", () =>
+    {
+        Check(!UiDisplayText.ContainsHangul(null) && !UiDisplayText.ContainsHangul("123") && UiDisplayText.ContainsHangul("가"), "null/numeric buffer");
+        string? Translate(string s) => s == "{0}日まで" ? "{0}일까지" : null;
+        string pass = "Home/SeasonPassButton/RemainDate/Remain";
+        Check(UiDisplayText.Render("28日まで", pass, Translate) == "28일까지", "approved date template");
+        Check(UiDisplayText.Render("28日まで", "UserName", Translate) == "28日まで", "unrelated text changed");
+        Check(UiDisplayText.Render("28日まで", pass, _ => null) == "28日まで", "unreviewed template invented");
+        Check(UiDisplayText.Render("2026年1月6日", "List/BattleLogBanner(Clone)/TopArea/Date", Translate) == "2026-01-06", "record date");
+        Check(UiDisplayText.Render("진행도\n", "Quest_Daily/SectionLong(Clone)/On/ProgressText", Translate) == "진행\n", "daily quest prefab variant missed");
+        Check(UiDisplayText.Render("권<cspace=1>장<cspace=-0.6> 몬스터<cspace=1> 소녀<cspace=-2>L<cspace=4>v:", "Dialog/RecomDaughterLV/Title", Translate) == "권장 Lv:", "JP spacing retained in compact caption");
+    });
+    Test("Executable dates survive stale CDN and unsupported collections are reported", () =>
+    {
+        var source = JsonNode.Parse("{\"table\":[{\"message\":\"yyyy/MM/dd\"},{\"message\":\"名前\"}]}")!;
+        var translations = new MasterUiTranslations(new(), new() { ["message_data"] = new() {
+            ["table[].message"] = new() { ["yyyy/MM/dd"] = "yyyy/MM/dd 형식", ["名前"] = "이름" } } },
+            new() { SchemaVersion = 1, Tables = new() { ["message_data"] = new() { Class = "Game.Table" } } });
+        Check(translations.ApplyMaster("message_data", "Game.Table", new JsonMasterNode(source)) == 1, "format applied or prose skipped");
+        Check(source["table"]![0]!["message"]!.GetValue<string>() == "yyyy/MM/dd", "executable format changed");
+        int warnings = 0;
+        translations.ApplyMaster("message_data", "Game.Table", new JsonMasterNode(JsonNode.Parse("{\"table\":{}}")!), _ => warnings++);
+        Check(warnings == 1, "unsupported collection silently ignored");
+        Check(UiDisplayText.IsDateFormat("yyyy/MM/dd") && UiDisplayText.IsDateFormat("HH:mm:ss") && !UiDisplayText.IsDateFormat("HP") && !UiDisplayText.IsDateFormat("yyyy/MM/dd 형식"), "format classification");
+    });
+    Test("Status prefix preserves tags, colon and translated ability suffix", () =>
+    {
+        string? Translate(string s) => s == "種族特性" ? "종족 특성" : null;
+        Check(UiDisplayText.TribePrefix("種族特性：", Translate) == "종족 특성：", "serialized prefix");
+        Check(UiDisplayText.TribePrefix("<b>種族特性</b> : 대지의 용맥", Translate) == "<b>종족 특성</b> : 대지의 용맥", "markup/suffix");
+        Check(UiDisplayText.TribePrefix("種族特性外", Translate) == "種族特性外", "partial word changed");
+        Check(UiDisplayText.TribePrefix("종족 특성：", Translate) == "종족 특성：", "not idempotent");
+        Check(UiDisplayText.TribePrefix("種族特性：", _ => null) == "種族特性：", "no approved translation");
+    });
+    Test("Compact weapon caption is limited to its fixed-width renderer", () =>
+    {
+        string path = "Canvas/Unit_StatusView/Class/WeaponTypeNameBase/WeaponTypeNameTitle";
+        Check(UiDisplayText.CompactWeapon("무기 종류 :", path) == "무기 :", "caption not shortened");
+        Check(UiDisplayText.CompactWeapon("무기 종류 :", path + "/WeaponTypeNameText") == "무기 종류 :", "value changed");
+        Check(UiDisplayText.CompactWeapon("무기 종류 :", "OtherScreen") == "무기 종류 :", "unrelated text changed");
+        Check(UiDisplayText.CompactWeapon("무기 :", path) == "무기 :", "corrected CDN changed");
+    });
     WritePackage(root);
     {
         byte[] png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jY9sAAAAASUVORK5CYII=");

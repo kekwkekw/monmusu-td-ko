@@ -44,7 +44,7 @@ internal static class UiHooks
     public static void TmpSet(TMP_Text __instance, ref string value)
     {
         if (applying || string.IsNullOrEmpty(value)) return;
-        try { if (!Protected(__instance)) value = Translate(value, "TMP") ?? value; }
+        try { if (!Protected(__instance)) value = UiDisplayText.Render(Translate(value, "TMP") ?? value, UiPresentation.PathOf(__instance.transform), s => Translate(s, "TMP-format")); }
         catch (Exception ex) { Plugin.Instance.Log.LogWarning("MM_UI_FAILED: " + ex.Message); }
     }
     public static void LegacyReady(Text __instance) => Guard(() =>
@@ -58,7 +58,22 @@ internal static class UiHooks
     {
         if (Protected(__instance)) return;
         string current = __instance.text;
-        if (!string.IsNullOrEmpty(current) && Translate(current, "TMP") is { } translated) __instance.text = translated;
-        Plugin.Instance.Fonts.Apply(__instance);
+        string path = UiPresentation.PathOf(__instance.transform);
+        if (!string.IsNullOrEmpty(current))
+        {
+            string translated = UiDisplayText.Render(Translate(current, "TMP") ?? current, path, s => Translate(s, "TMP-format"));
+            if (current != translated) __instance.text = translated;
+        }
+        var fonts = __instance.font?.name.Contains("Kurokane", StringComparison.OrdinalIgnoreCase) == true
+            ? Plugin.Instance.DecorativeFonts : Plugin.Instance.Fonts;
+        fonts.Apply(__instance);
+        UiPresentation.Apply(__instance, path);
+    });
+    public static void StatusStarting(cUnitStatusDialog __instance) => Guard(() =>
+    {
+        string source = __instance.m_tribeTextPrefix;
+        if (string.IsNullOrEmpty(source)) return;
+        string translated = UiDisplayText.TribePrefix(source, value => Translate(value, "StatusPrefix"));
+        if (translated != source) __instance.m_tribeTextPrefix = translated;
     });
 }

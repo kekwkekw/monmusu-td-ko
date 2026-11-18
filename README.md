@@ -1,6 +1,6 @@
 # 몬스터娘TD 한국어화 파이프라인
 
-몬타디 IL2CPP 게임의 원본 수집·추출과 Novel 번역·검수 도구다. [gctrans](https://github.com/kekwkekw/gctrans)의 Novel 흐름을 따라 **시나리오 수집 → Codex 또는 API 초벌 → ChatGPT PRO 의미검수 → 로컬 반영·검증 → 승인된 Git 반영**으로 진행한다. [BepInEx 플러그인](plugin/README_KO.md)은 승인된 행 기반 결과를 게임의 Utage 시나리오에 연결한다. `10001A0_Nml` 26행의 실제 게임 표시와 백로그를 확인했으며, 검증 범위는 [실기 기록](plugin/RUNTIME_TEST_KO.md)에 남겼다. CDN 게시와 전체 시나리오 검증은 별도다.
+몬타디 IL2CPP 게임의 원본 수집·추출과 Novel 번역·검수 도구다. [gctrans](https://github.com/kekwkekw/gctrans)의 Novel 흐름을 따라 **시나리오 수집 → Codex 또는 API 초벌 → ChatGPT PRO 의미검수 → 로컬 반영·검증 → 승인된 Git 반영**으로 진행한다. [BepInEx 플러그인](plugin/README_KO.md)은 승인된 행 기반 결과를 게임의 Utage 시나리오에 연결한다. `10001A0_Nml` 26행의 실제 게임 표시와 백로그를 확인했으며, 검증 범위는 [실기 기록](plugin/RUNTIME_TEST_KO.md)에 남겼다. 전체 Novel의 기계 검증과 표본 장면의 실기 확인은 구별한다.
 
 운영 정본은 **[docs/OPERATOR_KO.md](docs/OPERATOR_KO.md)**다. 원문·제어 태그·화자 원값·행 위치·중복 행을 보존하고, HOLD는 해당 행만 보류한다. 초벌·검수·반영 상태를 나누어 중단 후 이어갈 수 있다.
 
@@ -68,7 +68,7 @@ CI는 Windows와 Linux에서 동결 정책과 합성 데이터 테스트를 검�
 
 ## 게임 적용 준비
 
-`10001A0_Nml` 26행과 이름 2건의 PRO 검수 결과가 main에 반영돼 있다. 게임을 실행하지 않고 다음 명령으로 패키지와 플러그인을 빌드한다.
+Novel 4,146장면·159,834행(한국어 159,817행, 승인 HOLD 17행)과 Names 776건이 main에 반영돼 있다. 게임을 실행하지 않고 다음 명령으로 패키지와 플러그인을 빌드한다.
 
 ```powershell
 pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
@@ -76,4 +76,6 @@ pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 
 결과는 `dist/MonmusuMod/`에 생성된다. 빌드는 게임 폴더에 설치하지 않는다. 설정, 로컬/CDN 데이터 로딩, 한국어 폰트, 진단 로그 및 후속 실기 확인 절차는 [플러그인 운영 안내](plugin/README_KO.md)를 따른다.
 
-UI/Master 전체 원문 85,302항목과 등장 위치를 `translation/ui/source/`에 공개한다. Pro 번역과 자체 재검수를 거친 UI 1,183행과 Master 74,567행을 배포하며, 대상에서 제외한 UI 1,616행과 Master 7,936행은 원문으로 유지한다. MonmusuMod는 공개 GitHub CDN의 해시 manifest를 사용해 Novel·Master·UI 번역을 읽는다. 원문 입력, 검수 판정, 게임 배포 파일은 각각 분리되어 있다.
+UI/Master 전체 원문 85,302항목과 등장 위치를 `translation/ui/source/`에 공개한다. Pro 번역과 자체 재검수를 거친 UI 1,183행과 Master 74,566행을 배포하며, 대상에서 제외한 UI 1,616행과 Master 7,936행은 원문으로 유지한다. MonmusuMod는 공개 GitHub CDN의 해시 manifest를 사용해 Novel·Master·UI 번역을 읽는다. 원문 입력, 검수 판정, 게임 배포 파일은 각각 분리되어 있다.
+
+실기 UI 표시 수정과 흰 글자·짙은 외곽선 조정, 기술 날짜 서식 1건의 원문 유지 정정은 [최신 UI 검증 기록](plugin/UI_DISPLAY_RUNTIME_20261119_KO.md)에 정리했다. 신규 원문 차분·후속 이미지 번역·직접 전투 QA·정식 배포가 남아 있다.

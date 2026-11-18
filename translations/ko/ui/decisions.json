@@ -357038,16 +357038,16 @@
     },
     {
       "approved": true,
-      "disposition": "translate",
-      "evidence": "원문·시스템 메시지 문맥·고정 초벌을 다시 대조하여 행위 주체, 확인/경고 의미, 조건·부정, 승인 UI 용어, 변수·수치와 개행을 확인했다.",
+      "disposition": "keep_source",
+      "evidence": "User authorized fixing non-new-input QA issues on 2026-11-17. Native mission screen consumed message_data table/877/message as a DateTime format and rendered the mistranslated suffix 형식. Preserve the executable source format.",
       "field": "table[].message",
       "id": "master.e01338328e0ce855953da39a",
       "jp": "yyyy/MM/dd",
-      "ko": "yyyy/MM/dd 형식",
+      "ko": "",
       "lane": "master",
-      "reason": "",
-      "review_id": "pro-master008-001",
-      "reviewer": "ChatGPT Pro",
+      "reason": "Executable date format; preserve source for DateTime formatting.",
+      "review_id": "UI_MENU_FIX_20261117",
+      "reviewer": "Codex; user-approved QA correction",
       "table": "message_data"
     },
     {
@@ -1055613,14 +1055613,14 @@
     {
       "approved": true,
       "disposition": "translate",
-      "evidence": "원문·위치·고정 초벌 재대조 승인: U040/unit, kind=literal, occurrences=27, locations=27, first_container=assets/resources/ui/unit/npc_detail.prefab, class=TMPro.TextMeshProUGUI, pointer=/m_text. 의미·전역 UI 용어·표시 길이 및 ordered controls=0, numbers=0 보존 확인. Stage B 수정 없음; 고정 초벌 승인. 실제 게임 표시 확인은 수행 범위 외.",
+      "evidence": "User approved the 2026-11-15 display analysis and implementation on 2026-11-16. Shorten the fixed-width weapon label (53px usable at 14px) to prevent wrapping; weapon value remains separate. Source punctuation is preserved.",
       "id": "ui.dc81edfa73a99d01daf6e3c3",
       "jp": "武器種 :",
-      "ko": "무기 종류 :",
+      "ko": "무기 :",
       "lane": "ui",
       "reason": "",
-      "review_id": "pro-ui_restart001-001",
-      "reviewer": "ChatGPT Pro"
+      "review_id": "UI_LAYOUT_20261116",
+      "reviewer": "Codex; user-approved display correction"
     },
     {
       "approved": true,

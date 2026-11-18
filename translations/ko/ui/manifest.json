@@ -3,14 +3,14 @@
     {
       "kind": "master",
       "path": "master.json",
-      "sha256": "fadba35b8b72c09f0a3a6d29fdb083150f6f6d437e4229dbec12fecbc44814af",
-      "size": 22149841
+      "sha256": "e03a8163512d40f2dc3e8ac18b085366c1d0d62f10dd42b7322f64e78a7d1aa1",
+      "size": 22149800
     },
     {
       "kind": "general_ui",
       "path": "ui.json",
-      "sha256": "006262e4254379f6f9ce452b630f7f606acb21d2524e5ca13237ca512ae8ecb4",
-      "size": 99218
+      "sha256": "31a5c5e86e8c73c72038132266164a6a28d5ad3552ca23156007ce85729de978",
+      "size": 99211
     },
     {
       "kind": "master_bindings",
@@ -21,6 +21,6 @@
   ],
   "locale": "ko",
   "origin": "local",
-  "revision": "mm-ui-207ca38398555ecafa5a101c",
+  "revision": "mm-ui-67304a5d743ed564206e98b1",
   "schema_version": 1
 }

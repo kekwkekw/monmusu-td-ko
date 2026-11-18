@@ -74,14 +74,28 @@ internal static class MasterHooks
         }
         public IEnumerable<IMasterNode>? Elements()
         {
-            if (!value.GetIl2CppType().IsArray) return null;
-            var array = new Il2CppSystem.Array(value.Pointer);
             var nodes = new List<IMasterNode>();
-            for (int index = 0; index < array.Length; index++)
+            if (value.GetIl2CppType().IsArray)
+            {
+                var array = new Il2CppSystem.Array(value.Pointer);
+                for (int index = 0; index < array.Length; index++)
+                {
+                    int at = index;
+                    var child = array.GetValue(index);
+                    if (child != null) nodes.Add(new NativeNode(child, next => array.SetValue(next, at)));
+                }
+                return nodes;
+            }
+            // List<T> implements the native non-generic interfaces. Preserve
+            // boxed value-type writeback through the collection's own setter.
+            var list = value.TryCast<Il2CppSystem.Collections.IList>();
+            var collection = value.TryCast<Il2CppSystem.Collections.ICollection>();
+            if (list == null || collection == null) return null;
+            for (int index = 0; index < collection.Count; index++)
             {
                 int at = index;
-                var child = array.GetValue(index);
-                if (child != null) nodes.Add(new NativeNode(child, next => array.SetValue(next, at)));
+                var child = list[index];
+                if (child != null) nodes.Add(new NativeNode(child, next => list[at] = next));
             }
             return nodes;
         }

@@ -1,10 +1,12 @@
 # 몬타디 한국어 번역 플러그인
 
-BepInEx 6 / IL2CPP용 `MonmusuMod` 0.4.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject Master와 Unity Text/TMP UI도 치환한다. 공개 Novel은 4,146장면·159,834행(번역 159,817행, 승인 HOLD 17행)·Names 776건이다. UI는 1,183행, Master는 74,567행을 배포한다. [0.2.0 UI/Master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)은 당시 표본의 기록이다. 전체 UI/Master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
+BepInEx 6 / IL2CPP용 `MonmusuMod` 0.4.0이다. 승인된 Novel 결과를 Utage 명령 생성 전에 적용하고, ScriptableObject Master와 Unity Text/TMP UI도 치환한다. 공개 Novel은 4,146장면·159,834행(번역 159,817행, 승인 HOLD 17행)·Names 776건이다. UI는 1,183행, Master는 74,566행을 배포한다. [0.2.0 UI/Master 실기 결과](UI_RUNTIME_TEST_KO.md)와 [0.1.0 시나리오 기록](RUNTIME_TEST_KO.md)은 당시 표본의 기록이다. 전체 UI/Master 원문과 운영 방법은 [UI 안내](../translation/ui/README_KO.md)를 따른다.
 
 GCMod를 참고한 Image/Sprite 및 RawImage 교체는 `monmusu-images-v1` 카탈로그의 원본 텍스처와 UI 경로를 대조한다. 공개 패키지는 manifest의 `images`와 `image_files`를 사용한다. 별도로 설치한 로컬 카탈로그는 `[Images] LocalDirectory`로 선택할 수 있다. 카탈로그가 없는 패키지도 지원한다. [참고 구현과 라이선스](THIRD_PARTY/README.md)
 
 0.4.0의 최종 DLL은 진단 없이 도감 재생·스킵·재진입을 통과했다. 같은 세션의 메인 저장 복원과 장면 요청 실패 시 원문 복원도 확인했다. [CDN 로더 실기 기록](CDN_RUNTIME_TEST_KO.md)
+
+2026-11-19 UI 표시 보정과 흰 글자·짙은 외곽선의 실기 범위 및 남은 과제는 [최신 UI 기록](UI_DISPLAY_RUNTIME_20261119_KO.md)을 따른다.
 
 ## 빌드
 
@@ -27,7 +29,7 @@ pwsh -File plugin/Build.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 - 문자열 배열 기록은 native `Il2CppSystem.Array.SetValue`를 사용한다. 설치 interop의 `Il2CppStringArray` 인덱서에는 GC write barrier가 없어 직접 포인터 쓰기를 사용하지 않는다.
 - 이름은 대사창/백로그의 표시 Text에서만 exact Names로 바꾼다. 캐릭터 ID인 Arg1, 선택지 분기, Voice, PageCtrl은 바꾸지 않는다.
 - 원본 book 파일을 고치지 않는다. Utage의 본문 파싱, 타자 표시, 백로그, 저장 과정에는 변환된 Text가 전달되는 구조다. 해당 경로의 실제 호출과 저장/로드 동작은 실기 확인 항목이다.
-- 한글이 있는 Utage 본문·이름·선택지·백로그에는 설치된 `Malgun Gothic` 동적 폰트를 적용한다.
+- 한글 Unity Text는 설정된 동적 폰트를 사용한다. 선택적 `Font.NovelBodyBundle`은 Utage 본문·백로그에 별도의 내장 Unity Font를 적용한다. 현재 개인 설치는 RHR Bold 비교본이며, 이름·선택지는 일반 폰트 경로를 유지한다.
 - master는 게임의 `ntd.database.DataBaseManager.Preload`/`PreloadBeforeTitle` 코루틴 완료 시 등록된 ScriptableObject의 exact asset name·native class·field·JP를 모두 대조해 해당 문자열만 변경한다. ID, kana, 연결 키는 번역하지 않는다. Unity AssetBundle getter 자체는 hook하지 않는다.
 - 일반 UI는 exact JP만 치환한다. 입력 필드와 Utage 본문/이름/백로그/선택지는 별도 경로로 보호한다. Unity Text에는 동적 한글 폰트를, TMP에는 원래 폰트를 유지하면서 별도 TMP 번들의 한글 fallback을 적용한다. 이미지 글자는 이 경로로 변경되지 않는다.
 
@@ -47,7 +49,7 @@ pwsh -File plugin/Install.ps1 -GameDir 'C:\Users\user\mnms_td_r18'
 
 `BepInEx/LogOutput.log`에서 확인할 항목:
 
-- `MM_READY`: 선택한 패키지, 등록 시나리오 수와 실제 로드 수, 이름/UI/master 수, hook 21개. 시작의 `loaded_scenarios=0 rows=0`은 정상이다.
+- `MM_READY`: 선택한 패키지, 등록 시나리오 수와 실제 로드 수, 이름/UI/master 수, hook 23개. 시작의 `loaded_scenarios=0 rows=0`은 정상이다.
 - `MM_CDN_READY` / `MM_CDN_STARTUP`: 공통 데이터 검증 후 선택한 세대와 CDN 시작 대기 시간.
 - `MM_CDN_REQUEST` / `MM_CACHE_HIT` / `MM_CACHE_REUSE`: 실제 요청과 해시가 일치하는 캐시 재사용.
 - `MM_NOVEL_READY` / `MM_NOVEL_FAILED` / `MM_NOVEL_DEADLINE`: 개별 장면 준비, 실패 또는 진입 대기 만료. 만료된 진입에서는 해당 grid를 원문으로 컴파일한다.
@@ -81,11 +83,13 @@ CDN 설정을 비우면 기존 다운로드 캐시보다 `DataDirectory`의 로�
 
 ## TMP 폰트 의존성
 
-이 게임에서는 OS 동적 Font를 TMP FontEngine으로 가져올 수 없어, TMP 한글 표시에 별도 font bundle이 필요하다. 현재 개인 설치는 기존 GCMod의 `RHR_Medium_GFSAFE_ADH.bundle`을 복사해 사용한다. 원래 GC 설치는 변경하지 않는다. `Build.ps1 -FontBundle <기존 번들 경로>`로 개인 패키지에 넣고, `Font.TmpBundle`은 기본 `fonts/RHR_Medium_GFSAFE_ADH.bundle`을 가리킨다. 이 선택적 빌드에는 추출기 환경의 UnityPy가 필요하다. 두 게임의 TMP 직렬화 버전 차이로 비어 있는 material 참조는 동일 번들 material로 복원하고 게임의 TMP shader를 사용한다.
+이 게임에서는 OS 동적 Font를 TMP FontEngine으로 가져올 수 없어 별도 TMP font bundle이 필요하다. 현재 개인 설치는 일반 UI에 RHR Bold, 원본 폰트명에 `Kurokane`가 있는 장식 UI에 Maple Bold를 사용한다. `Font.TmpBundle = fonts/rhr-bold-ui.bundle`, `Font.DecorativeTmpBundle = fonts/maple-bold-ui.bundle`로 역할을 분리한다. 장식체는 공통 fallback에 등록하지 않는다. [폰트 빌드 절차](Fonts/README_KO.md)를 따른다.
 
-번들의 `m_PointSize`는 float, 게임의 FaceInfo는 int라서 크기가 0으로 읽힌다. `tools/font_bundle_metadata.py`가 원래 point size와 번들 SHA-256을 `.bundle.metrics.json`에 보존하고, runtime이 두 파일을 대조해 90을 복원한다. 다른 크기를 추측해 강제로 맞추지 않는다. 초기 실기용 UI/Master 표본의 한글은 이 번들의 1,638개 character table에 모두 있었다. 게임에서 누락 문자는 `MM_TMP_GLYPH_MISSING`으로 확인한다.
+기본 `TmpBundle` 값과 `Build.ps1 -FontBundle` 옵션은 초기 GCMod RHR Medium 번들과의 호환을 위해 유지한다. 신규 두 번들을 선택하려면 각각의 번들과 `.metrics.json`을 개인 패키지 `fonts/`에 준비하고 설정을 명시한다. 이 옵션 하나가 두 역할의 폰트를 자동 패키징하지 않는다. 기존 개인 설정은 설치 시 유지한다.
 
-GCMod와 같이 이 외부 폰트 번들은 Git/CDN 공개 대상에서 제외한다. 공개 소스만 clone한 사용자는 적합한 TMP 폰트를 별도로 준비해야 한다. `dist/MonmusuMod/`는 이전 개인 빌드의 폰트를 유지할 수 있으므로 공개 release 파일로 자동 게시하지 않는다. 글리프와 실제 표시 확인은 런타임 검증에 기록한다.
+게임의 TMP 직렬화 차이로 누락되는 material과 point size는 번들 material·게임 shader 및 SHA-256에 묶인 metric sidecar로 복원한다. `tools/font_bundle_metadata.py`가 원래 point size를 보존하며 다른 크기를 추측하지 않는다. 새 정적 아틀라스는 현행 승인 UI/Master/Names의 한글 1,459자를 포함해 총 1,605자다. 원본 TTF의 전체 현대 한글 11,172자 지원과 구분한다. 새 번역이 들어오면 corpus를 갱신하고 `MM_TMP_GLYPH_MISSING`을 확인한다.
+
+외부 폰트 번들·원본 게임 파일은 Git/CDN 공개 대상에 넣지 않는다. 공개 clone에서는 적합한 폰트를 별도 준비해야 한다. `dist/MonmusuMod/`의 개인 폰트·설정은 정식 release 파일로 자동 게시하지 않는다. 최종 배포 시 RHR/Maple 이용 조건과 저작권 안내를 포함한다.
 
 ## 구현 근거
 

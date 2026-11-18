@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Text.Json;
 using System.Security.Cryptography;
+using MonmusuMod.Core;
 
 namespace MonmusuMod;
 
@@ -12,24 +13,47 @@ internal sealed class KoreanFont
 {
     readonly string family;
     readonly string bundlePath;
+    readonly string legacyBundlePath;
     readonly bool enabled;
+    readonly bool globalFallback;
     readonly Action<string> info, warning;
     readonly HashSet<char> reportedMissing = new();
     Font? font;
     TMP_FontAsset? tmpFont;
     AssetBundle? fontBundle;
+    AssetBundle? legacyFontBundle;
     bool tmpAttempted;
     readonly HashSet<char> tmpCharacters = new();
-    readonly Dictionary<int, Font> originalFonts = new();
+    readonly Dictionary<int, (Font Font, FontStyle Style)> originalFonts = new();
     bool attempted;
-    public KoreanFont(string family, string bundlePath, bool enabled, Action<string> info, Action<string> warning)
-        => (this.family, this.bundlePath, this.enabled, this.info, this.warning) = (family, bundlePath, enabled, info, warning);
-    static bool ContainsHangul(string value) => value.Any(ch => ch is >= '\uAC00' and <= '\uD7A3' or >= '\u1100' and <= '\u11FF' or >= '\u3130' and <= '\u318F');
+    public KoreanFont(string family, string bundlePath, bool enabled, Action<string> info, Action<string> warning,
+        string legacyBundlePath = "", bool globalFallback = true)
+        => (this.family, this.bundlePath, this.enabled, this.info, this.warning, this.legacyBundlePath, this.globalFallback) =
+            (family, bundlePath, enabled, info, warning, legacyBundlePath, globalFallback);
+    static bool ContainsHangul(string? value) => UiDisplayText.ContainsHangul(value);
     Font? EnsureFont()
     {
         if (!attempted)
         {
             attempted = true;
+            if (legacyBundlePath.Length != 0)
+            {
+                try
+                {
+                    var bundle = AssetBundle.LoadFromFile(legacyBundlePath);
+                    var embedded = bundle?.LoadAsset_Internal("rhr-bold-novel", Il2CppType.Of<Font>())?.TryCast<Font>();
+                    if (embedded == null || !embedded.dynamic || !embedded.HasCharacter('\uAC00'))
+                        throw new InvalidDataException("Embedded dynamic Korean Font missing");
+                    legacyFontBundle = bundle;
+                    font = embedded;
+                    info($"MM_NOVEL_BODY_FONT_READY asset={font.name} dynamic={font.dynamic}");
+                    return font;
+                }
+                catch (Exception ex)
+                {
+                    warning("MM_NOVEL_BODY_FONT_FAILED: " + ex.Message);
+                }
+            }
             try
             {
                 // This game's string overload is an unstripping-failure stub, and the
@@ -61,8 +85,11 @@ internal sealed class KoreanFont
         int id = text.GetInstanceID();
         if (!ContainsHangul(text.text))
         {
-            if (font != null && text.font == font && originalFonts.Remove(id, out var original) && original != null)
-                text.font = original;
+            if (font != null && text.font == font && originalFonts.Remove(id, out var original) && original.Font != null)
+            {
+                text.font = original.Font;
+                if (legacyFontBundle != null) text.fontStyle = original.Style;
+            }
             return;
         }
         if (EnsureFont() == null) return;
@@ -70,8 +97,13 @@ internal sealed class KoreanFont
             if (!font!.HasCharacter(ch) && reportedMissing.Add(ch)) warning($"MM_FONT_GLYPH_MISSING U+{(int)ch:X4}");
         if (text.font != font)
         {
-            originalFonts[id] = text.font;
+            originalFonts[id] = (text.font, text.fontStyle);
             text.font = font;
+            if (legacyFontBundle != null)
+            {
+                text.fontStyle &= ~FontStyle.Bold;
+                info($"MM_NOVEL_BODY_FONT_APPLIED renderer={text.name} asset={font!.name} size={text.fontSize} style={text.fontStyle}");
+            }
         }
     }
     public void Apply(TMP_Text? text)
@@ -122,7 +154,11 @@ internal sealed class KoreanFont
             if (gameMaterial != null && gameMaterial.shader != null) tmpFont.material.shader = gameMaterial.shader;
             if (tmpFont.atlasTexture != null) tmpFont.material.mainTexture = tmpFont.atlasTexture;
             UnityEngine.Object.DontDestroyOnLoad(tmpFont);
-            if (!TMP_Settings.fallbackFontAssets.Contains(tmpFont)) TMP_Settings.fallbackFontAssets.Add(tmpFont);
+            tmpFont.ReadFontAssetDefinition();
+            // Korean prose wraps at spaces, while the existing CJK rules still
+            // govern Japanese. This does not modify source strings or tags.
+            TMP_Settings.instance.m_UseModernHangulLineBreakingRules = true;
+            if (globalFallback && !TMP_Settings.fallbackFontAssets.Contains(tmpFont)) TMP_Settings.fallbackFontAssets.Add(tmpFont);
             info("MM_TMP_FONT_READY asset=" + tmpFont.name + " route=" + (fontBundle != null ? "bundle" : "dynamic"));
             info($"MM_TMP_FONT_INFO glyphs={tmpFont.characterTable.Count} atlas={tmpFont.atlasWidth}x{tmpFont.atlasHeight} point={tmpFont.faceInfo.pointSize} scale={tmpFont.faceInfo.scale} texture={tmpFont.material.mainTexture?.name} shader={tmpFont.material.shader?.name}");
         }
