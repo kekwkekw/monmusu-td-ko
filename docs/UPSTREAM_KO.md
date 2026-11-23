@@ -21,4 +21,4 @@
 
 추출기 구조 참고 자료는 [MonmusuPlayer](https://github.com/BithreenGirlen/MonmusuPlayer), [DataTable](https://github.com/PackageInstaller/DataTable/tree/game/MonmusuTDx), [몬무스 데이터 사이트](https://github.com/monmusu-td-db/monmusu-td-db.github.io)다. 게임의 원본 번들과 추출 결과, 참고 저장소 clone은 로컬에 보존하며 이 소스 저장소에 넣지 않는다.
 
-UI/master는 gctrans의 현행 `GCMod.Candidate` LocalParity를 기준으로 비교했다. table/field/JP→KO master, 독립 exact UI 사전, 원문 위치와 disposition 기록, hash/size UI descriptor를 유지한다. 몬타디에서만 필요한 차이는 JSON 로더 대신 ScriptableObject field/array 대조, native class binding, IL2CPP의 유효한 비제네릭 API 사용, Utage UI 보호다. gctrans의 외부 TMP 폰트 의존성은 개인 설치에서 재사용하며 공개 Git/CDN에는 넣지 않는다.
+UI/master는 gctrans의 현행 `GCMod.Candidate` 구조를 기준으로 비교했다. table/field/JP→KO master, 독립 exact UI 사전, 원문 위치와 disposition 기록, hash/size UI descriptor를 유지한다. 몬타디에서만 필요한 차이는 JSON 로더 대신 ScriptableObject field/array 대조, native class binding, IL2CPP의 유효한 비제네릭 API 사용, Utage UI 보호다. gctrans의 외부 TMP 폰트 의존성은 개인 설치에서 재사용하며 공개 Git/CDN에는 넣지 않는다.

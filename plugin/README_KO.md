@@ -93,7 +93,7 @@ CDN 설정을 비우면 기존 다운로드 캐시보다 `DataDirectory`의 로�
 
 ## 구현 근거
 
-GCMod의 Novel 치환과 현행 Candidate LocalParity의 master/UI 분리, exact UI hook, 원문 위치 보존, manifest 구조를 참고했다. GC 전용 숫자 Novel ID·DMM EventText·UI 레이아웃 규칙은 이식하지 않았다. 몬타디의 Utage와 ScriptableObject, Unity Text/TMP에 맞춰 별도로 구현했다.
+GCMod의 Novel 치환과 현행 Candidate 런타임의 master/UI 분리, exact UI hook, 원문 위치 보존, manifest 구조를 참고했다. GC 전용 숫자 Novel ID·DMM EventText·UI 레이아웃 규칙은 이식하지 않았다. 몬타디의 Utage와 ScriptableObject, Unity Text/TMP에 맞춰 별도로 구현했다.
 
 - 정적 분석: `plugin/Inspect-Game.ps1`, `work/plugin-analysis/game-profile.json`
 - 패키지 검사: `work/plugin-analysis/package-export.json`, `dist/MonmusuMod/BUILD.json`
